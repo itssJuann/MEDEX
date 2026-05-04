@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Base de datos SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# Variables de entorno (no subir contraseñas)
+.env
+*.env.local
+
+# Node / Frontend
+node_modules/
+dist/
+.pnp
+.pnp.js
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm / IDEs
+.idea/
