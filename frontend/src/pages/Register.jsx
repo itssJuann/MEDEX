@@ -1,0 +1,85 @@
+import API from '../utils/api'
+import { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import { useLang } from '../context/LangContext'
+import Logo from '../components/Logo'
+
+export default function Register() {
+  const { login } = useAuth()
+  const { t, lang } = useLang()
+  const navigate = useNavigate()
+  const [form, setForm]     = useState({ name: '', email: '', password: '' })
+  const [error, setError]   = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError('')
+    if (form.password.length < 6) { setError(t.passwordHint); return }
+    setLoading(true)
+    try {
+      const res = await fetch(`${API}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.detail || 'Error')
+      login(data)
+      navigate('/')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="bg-white rounded-2xl shadow p-8 w-full max-w-md border border-gray-100">
+        <div className="flex flex-col items-center mb-8">
+          <Logo size={48} showText={true} textColor="text-primary" variant="light" />
+          <p className="text-gray-500 text-sm mt-3">{t.registerSubtitle}</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t.nameLabel}</label>
+            <input type="text" required value={form.name}
+              onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+              className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition"
+              placeholder={lang === 'en' ? 'John Smith' : 'Juan García'}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t.emailLabel}</label>
+            <input type="email" required value={form.email}
+              onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+              className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition"
+              placeholder="tu@correo.com"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t.passwordLabel}</label>
+            <input type="password" required value={form.password}
+              onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
+              className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-primary transition"
+              placeholder={t.passwordHint}
+            />
+          </div>
+          {error && <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">{error}</div>}
+          <button type="submit" disabled={loading}
+            className="w-full bg-primary text-white py-2.5 rounded-xl font-medium text-sm hover:bg-blue-900 transition disabled:opacity-60">
+            {loading ? t.registering : t.registerBtn}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-gray-500 mt-6">
+          {t.hasAccount}{' '}
+          <Link to="/login" className="text-primary font-medium hover:underline">{t.loginLink}</Link>
+        </p>
+      </div>
+    </div>
+  )
+}
