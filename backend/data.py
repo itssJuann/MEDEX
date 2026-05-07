@@ -36,6 +36,51 @@ PATHOLOGIES = [
                 },
 
                 # --- PATH A: ECG correcto ---
+                "n2b_premeds": {
+                    "description": "Confirmado IAMCEST. Antes de trasladar al paciente a hemodinamia, ¿qué tratamiento farmacológico debes administrar de inmediato?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "AAS 300 mg VO + ticagrelor 180 mg VO + heparina no fraccionada IV en bolo",
+                            "correct": True,
+                            "feedback": "Correcto. La triple terapia pre-ICPP es estándar: AAS (inhibe TXA2), ticagrelor o prasugrel (bloqueo P2Y12, superior a clopidogrel en IAMCEST), y heparina IV para mantener anticoagulación durante el procedimiento.",
+                            "next": "n3_posticpp"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Solo AAS 100 mg — los demás fármacos los decide el hemodinamista",
+                            "correct": False,
+                            "feedback": "Insuficiente. La doble antiagregación y la anticoagulación deben iniciarse antes del procedimiento. Retrasar el ticagrelor y la heparina aumenta el riesgo de trombosis del stent.",
+                            "next": "n3_posticpp_subopt"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Morfina IV + diazepam — primero calmar el dolor y la ansiedad",
+                            "correct": False,
+                            "feedback": "Incorrecto. La morfina en IAMCEST reduce la absorción del ticagrelor y se asocia a mayor mortalidad. El dolor se controla con la reperfusión. El tratamiento antitrombótico es la prioridad.",
+                            "next": "n3_posticpp_subopt"
+                        }
+                    ]
+                },
+                "n3_posticpp_subopt": {
+                    "description": "El paciente llegó a hemodinamia con premedicación incompleta. Se implantó stent en DA proximal con éxito. Inmediatamente post-procedimiento: TA 95/60 mmHg, FC 55 lpm, diuresis escasa. ¿Qué sospechas?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Reacción vagal post-procedimiento — atropina 0.5 mg IV y expansión de volumen",
+                            "correct": True,
+                            "feedback": "Correcto. La bradicardia con hipotensión post-ICPP en infarto inferior/de DA es frecuentemente vagal. Atropina y volumen suelen resolver el cuadro en minutos. Confirmar con ECG que no hay bloqueo AV.",
+                            "next": "n4_vigilancia_iam"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Shock cardiogénico — iniciar dopamina a dosis altas",
+                            "correct": False,
+                            "feedback": "Prematuro. La bradicardia e hipotensión post-procedimiento suelen ser vagales en el contexto de ICPP exitosa. La dopamina a dosis altas tiene efectos arritmogénicos sin confirmar el mecanismo.",
+                            "next": "end_sin_reperfusion"
+                        }
+                    ]
+                },
                 "n2_ecg": {
                     "description": "El ECG muestra elevación del segmento ST mayor a 2mm en derivaciones V1-V4. Troponinas pendientes. IAMCEST confirmado. Han pasado 8 minutos desde el ingreso. ¿Cuál es el tratamiento de reperfusión de elección?",
                     "options": [
@@ -44,7 +89,7 @@ PATHOLOGIES = [
                             "text": "Angioplastia primaria (ICPP) — el laboratorio de hemodinamia está disponible en 40 minutos",
                             "correct": True,
                             "feedback": "Correcto. La ICPP es de elección cuando puede realizarse en menos de 120 minutos desde el primer contacto médico. 40 minutos es óptimo.",
-                            "next": "n3_posticpp"
+                            "next": "n2b_premeds"
                         },
                         {
                             "id": "b",
@@ -63,14 +108,14 @@ PATHOLOGIES = [
                     ]
                 },
                 "n3_posticpp": {
-                    "description": "La ICPP fue exitosa. Se implantó stent en DA proximal. El paciente está estable, FC 78 lpm, TA 120/75 mmHg. ¿Cuál es el esquema de tratamiento médico correcto al alta?",
+                    "description": "La ICPP fue exitosa con premedicación completa. Se implantó stent en DA proximal. El paciente está estable en sala de recuperación, FC 78 lpm, TA 120/75 mmHg. A las 4 horas post-ICPP, el ECG de control muestra ritmo sinusal con ondas Q en V1-V4 y elevación de troponina a 45 ng/mL (pico de necrosis esperado). ¿Cuál es el esquema de tratamiento correcto al alta?",
                     "options": [
                         {
                             "id": "a",
-                            "text": "AAS + clopidogrel + betabloqueante + IECA + estatina de alta intensidad",
+                            "text": "AAS + ticagrelor + betabloqueante + IECA + estatina de alta intensidad",
                             "correct": True,
-                            "feedback": "Perfecto. Este es el pilar del tratamiento post-IAM: doble antiagregación (previene reoclusión del stent), betabloqueante (reduce mortalidad), IECA (remodelado ventricular) y estatina (estabilización de placa).",
-                            "next": "end_exito"
+                            "feedback": "Perfecto. Este es el pilar del tratamiento post-IAM: doble antiagregación (previene reoclusión del stent), betabloqueante (reduce mortalidad), IECA (remodelado ventricular) y estatina (estabilización de placa). Ticagrelor es superior a clopidogrel en este contexto.",
+                            "next": "n4_vigilancia_iam"
                         },
                         {
                             "id": "b",
@@ -150,11 +195,38 @@ PATHOLOGIES = [
                     ]
                 },
 
+                "n4_vigilancia_iam": {
+                    "description": "Al día siguiente post-ICPP, el paciente refiere que duerme bien pero nota palpitaciones ocasionales. El ECG muestra 4 extrasístoles ventriculares aisladas por minuto. FE estimada por eco precoz: 48%. TA 118/72, FC 82. ¿Cuál es tu conducta respecto a las arritmias?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Tranquilizar: las extrasístoles ventriculares postinfarto son benignas si son aisladas — no requieren antiarrítmico específico",
+                            "correct": True,
+                            "feedback": "Correcto. Las EVs aisladas en el post-IAM inmediato son frecuentes y no requieren tratamiento antiarrítmico. El betabloqueante ya incluido en el tratamiento es el mejor manejo. Los antiarrítmicos clase I aumentan la mortalidad post-IAM (estudio CAST).",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Iniciar amiodarona IV — las arritmias post-IAM pueden ser precursoras de fibrilación ventricular",
+                            "correct": False,
+                            "feedback": "Innecesario. Las EVs aisladas no son indicación de amiodarona. Los antiarrítmicos profilácticos post-IAM NO reducen la mortalidad y algunos la aumentan. Solo tratar arritmias sintomáticas sostenidas o FV/TV.",
+                            "next": "end_antibiotico"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Solicitar estudio electrofisiológico urgente antes del alta",
+                            "correct": False,
+                            "feedback": "Prematuro. El estudio electrofisiológico se considera en pacientes con TV sostenida o síncope post-IAM, no por EVs aisladas. La indicación de DAI se evalúa a los 40 días si la FE persiste ≤35%.",
+                            "next": "end_incompleto"
+                        }
+                    ]
+                },
+
                 # --- TERMINALES ---
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Excelente manejo. Diagnóstico precoz con ECG, reperfusión óptima con ICPP en menos de 60 minutos y tratamiento médico completo al alta. El paciente fue dado de alta al 5to día con fracción de eyección conservada del 55%.",
+                    "description": "Excelente manejo integral. Diagnóstico precoz con ECG, premedicación correcta, reperfusión con ICPP en menos de 60 minutos, tratamiento médico completo, vigilancia de arritmias benignas. Alta al 4to día con FE 48% y educación sobre adherencia, dieta y rehabilitación cardíaca.",
                     "pearl": "Perla clínica: El tiempo puerta-balón menor a 90 minutos es el indicador de calidad más importante en el IAMCEST. Cada 30 minutos de retraso en la reperfusión aumenta la mortalidad a 30 días en un 7.5%."
                 },
                 "end_antibiotico": {
@@ -273,7 +345,7 @@ PATHOLOGIES = [
                             "text": "Tranquilizar: la respuesta clínica puede tardar 48-72h, citar en 5 días si no mejora",
                             "correct": True,
                             "feedback": "Correcto. La respuesta a antibióticos en NAC puede tardar 3-5 días. La mejoría clínica parcial (menos tos y dolor) con SatO2 adecuada son signos favorables. No se indica cambio de antibiótico aún.",
-                            "next": "end_exito"
+                            "next": "n4_seguimiento_nac"
                         },
                         {
                             "id": "b",
@@ -313,12 +385,58 @@ PATHOLOGIES = [
                     ]
                 },
 
+                "n4_seguimiento_nac": {
+                    "description": "La paciente acude a control a los 7 días. Refiere que completó los 7 días de amoxicilina y está asintomática desde hace 2 días. Sin fiebre, tos residual mínima, SatO2 98%. ¿Cuál es el siguiente paso?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Radiografía de tórax de control en 6-8 semanas para confirmar resolución radiológica",
+                            "correct": True,
+                            "feedback": "Correcto. La resolución clínica de la NAC precede a la radiológica. La RxTx de control en 6-8 semanas es necesaria para confirmar resolución completa y descartar una lesión subyacente (especialmente en fumadores o >50 años). Una consolidación que no resuelve puede ocultar una neoplasia.",
+                            "next": "n5_control_imagen_nac"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Dar de alta definitiva — está asintomática, no necesita más controles",
+                            "correct": False,
+                            "feedback": "Incorrecto. Aunque la mejoría clínica es excelente, la resolución radiológica de la NAC puede tardar 4-8 semanas. Sin RxTx de control, se puede pasar por alto una neoplasia subyacente o una neumonía organizativa.",
+                            "next": "end_cambio_antibiotico_precoz"
+                        },
+                        {
+                            "id": "c",
+                            "text": "TC de tórax para confirmar resolución completa",
+                            "correct": False,
+                            "feedback": "Excesivo. La TC no está indicada de rutina en NAC leve no complicada que resolvió clínicamente. La RxTx es suficiente como control. La TC se reserva si la RxTx de control muestra hallazgos persistentes.",
+                            "next": "end_hospitalizacion_innecesaria"
+                        }
+                    ]
+                },
+                "n5_control_imagen_nac": {
+                    "description": "La paciente vuelve a las 7 semanas. RxTx de control: resolución completa del infiltrado. Sin hallazgos residuales. Es fumadora de 15 paquetes-año, 45 años. ¿Qué añades al cierre del episodio?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Consejería antitabaco + vacunación antineumocócica y antigripal + recomendación de screening de cáncer de pulmón según criterios",
+                            "correct": True,
+                            "feedback": "Correcto. La NAC en fumadores es oportunidad de intervención: consejería antitabaco reduce el riesgo de futuras infecciones respiratorias. Vacunación reduce NAC recurrente en 50-60%. Con 15 paq/año y 45 años, aún no cumple criterios de screening (requiere >20 paq/año y >50 años), pero en 5 años sí.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Solo felicitar a la paciente por la recuperación y cerrar el caso",
+                            "correct": False,
+                            "feedback": "Oportunidad perdida. El episodio de NAC en una fumadora activa es el momento ideal para intervención preventiva. Sin vacunación y sin consejería antitabaco, el riesgo de recurrencia es significativo.",
+                            "next": "end_hospitalizacion_precoz"
+                        }
+                    ]
+                },
+
                 # --- TERMINALES ---
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Excelente manejo. Diagnóstico con la herramienta correcta, estratificación con CURB-65, tratamiento ambulatorio apropiado y seguimiento adecuado. La paciente completó 7 días de amoxicilina y fue dada de alta sin complicaciones.",
-                    "pearl": "Perla clínica: En NAC leve (CURB-65 0-1) el tratamiento ambulatorio reduce la mortalidad respecto a la hospitalización por infecciones nosocomiales. La amoxicilina cubre el 90% de los Streptococcus pneumoniae en NAC no complicada."
+                    "description": "Manejo ejemplar. Diagnóstico con RxTx, estratificación CURB-65, antibiótico correcto, seguimiento a los 7 días, RxTx de control con resolución confirmada, y prevención secundaria con vacunación y consejería antitabaco. La paciente no ha tenido más episodios.",
+                    "pearl": "Perla clínica: En NAC leve (CURB-65 0-1) el tratamiento ambulatorio reduce la mortalidad respecto a la hospitalización por infecciones nosocomiales. La amoxicilina cubre el 90% de los Streptococcus pneumoniae en NAC no complicada. El control radiológico en 6-8 semanas es mandatorio en fumadores y mayores de 50 años."
                 },
                 "end_cambio_antibiotico_precoz": {
                     "terminal": True,
@@ -389,14 +507,14 @@ PATHOLOGIES = [
                     ]
                 },
                 "n2_tc": {
-                    "description": "La TC sin contraste no muestra hemorragia. Signo de la arteria cerebral media hiperdensa leve. NIHSS calculado: 12 puntos. Han transcurrido 110 minutos desde el inicio de síntomas. El paciente está dentro de la ventana de 4.5 horas. ¿Cuál es el tratamiento de reperfusión?",
+                    "description": "La TC sin contraste no muestra hemorragia. Signo de la arteria cerebral media hiperdensa leve. NIHSS calculado: 12 puntos. Han transcurrido 110 minutos desde el inicio de síntomas. El paciente está dentro de la ventana de 4.5 horas. ¿Cuál es el siguiente paso antes de decidir el tratamiento de reperfusión?",
                     "options": [
                         {
                             "id": "a",
-                            "text": "Trombolisis IV con alteplase 0.9 mg/kg",
+                            "text": "Verificar lista de contraindicaciones para trombolisis (TA, glucemia, cirugía reciente, ACV previo, anticoagulación)",
                             "correct": True,
-                            "feedback": "Correcto. Dentro de las 4.5h del inicio, con TC sin hemorragia y sin contraindicaciones, la trombolisis IV reduce la discapacidad a 90 días significativamente (NNT=8).",
-                            "next": "n3_trombo"
+                            "feedback": "Correcto. Antes de administrar alteplase, siempre verificar contraindicaciones absolutas: TA >185/110, glucemia <50 o >400, cirugía mayor en últimas 2 semanas, ACV o TCE en últimos 3 meses, anticoagulación activa. Este paso es mandatorio y tarda menos de 5 minutos.",
+                            "next": "n2b_elegibilidad"
                         },
                         {
                             "id": "b",
@@ -411,6 +529,32 @@ PATHOLOGIES = [
                             "correct": False,
                             "feedback": "Incorrecto. La heparina no tiene indicación en ACV isquémico agudo para reperfusión. Aumenta el riesgo de transformación hemorrágica sin mejorar el pronóstico.",
                             "next": "end_heparina_acv"
+                        }
+                    ]
+                },
+                "n2b_elegibilidad": {
+                    "description": "Checklist de elegibilidad: TA 175/100 mmHg (requiere control), glucemia 118 mg/dL (OK), sin cirugía reciente, sin anticoagulantes, ACV previo hace 5 años (¿contraindicación?). La TA es ≥185/110. ¿Qué haces?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Labetalol 10 mg IV para bajar TA a <185/110, luego administrar alteplase",
+                            "correct": True,
+                            "feedback": "Correcto. La TA >185/110 es contraindicación para trombolisis, pero se puede tratar con labetalol o nicardipina IV para alcanzar el umbral. ACV hace 5 años NO es contraindicación absoluta (solo los últimos 3 meses). Con TA controlada, el paciente es elegible.",
+                            "next": "n3_trombo"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Contraindicado por ACV previo hace 5 años — manejo conservador",
+                            "correct": False,
+                            "feedback": "Incorrecto. El ACV previo solo contraindica la trombolisis si fue en los últimos 3 meses. Un ACV de hace 5 años no es contraindicación. La TA sí es el problema a resolver.",
+                            "next": "end_conservador"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Administrar alteplase con la TA actual — el beneficio supera el riesgo",
+                            "correct": False,
+                            "feedback": "Incorrecto. La TA >185/110 aumenta significativamente el riesgo de hemorragia cerebral post-trombolisis. Primero controlar la TA, luego administrar. Este orden es mandatorio según los protocolos internacionales.",
+                            "next": "end_anticoag_post_tpa"
                         }
                     ]
                 },
@@ -441,7 +585,7 @@ PATHOLOGIES = [
                             "text": "Monitoreo en Unidad de Stroke, TA objetivo <180/105 durante las primeras 24h, nueva TC en 24h",
                             "correct": True,
                             "feedback": "Correcto. Tras trombolisis se debe mantener TA <180/105 (no bajar demasiado — riesgo de hipoperfusión), monitoreo neurológico estricto y TC de control para evaluar transformación hemorrágica.",
-                            "next": "end_exito"
+                            "next": "n4_prevencion_acv"
                         },
                         {
                             "id": "b",
@@ -452,11 +596,37 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_prevencion_acv": {
+                    "description": "TC de control a las 24h: sin hemorragia. NIHSS de 3. El paciente está estable. Ecocardiograma y Holter solicitados para buscar la causa (FA paroxística). ¿Cuál es el tratamiento de prevención secundaria al alta?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Antiagregación con AAS + estatina de alta intensidad + control de TA + buscar FA con Holter prolongado",
+                            "correct": True,
+                            "feedback": "Correcto. En ACV isquémico sin FA identificada, la antiagregación (AAS ± clopidogrel por 21 días en ACV minor) más estatina y control de FRCV es el estándar. El Holter prolongado detecta FA paroxística en el 15-20% de los ACV criptogénicos.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Anticoagulación con warfarina de inmediato — puede tener FA no detectada",
+                            "correct": False,
+                            "feedback": "Incorrecto. No se anticoagula empíricamente sin diagnóstico de FA. La anticoagulación precoz post-ACV aumenta el riesgo de transformación hemorrágica. Primero confirmar FA con Holter, luego anticoagular si se detecta.",
+                            "next": "end_anticoag_post_tpa"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Solo rehabilitación — el tratamiento médico ya terminó con la trombolisis",
+                            "correct": False,
+                            "feedback": "Incorrecto. La prevención secundaria es fundamental: sin antiagregación y estatina, el riesgo de recurrencia a 1 año es del 10-15%. La rehabilitación es necesaria pero no reemplaza el tratamiento farmacológico.",
+                            "next": "end_aspirina"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Excelente manejo. Diagnóstico precoz con TC, trombolisis dentro de ventana y cuidados post-reperfusión correctos. El paciente fue dado de alta a los 5 días con NIHSS de 2, recuperación casi completa del lenguaje y fuerza 4/5 en brazo derecho. Inicia rehabilitación ambulatoria.",
-                    "pearl": "Perla clínica: El tiempo puerta-aguja (door-to-needle) debe ser menor a 60 minutos. Por cada 15 minutos de reducción en el tiempo de trombolisis, se salvan 4 semanas de vida saludable ajustada por discapacidad."
+                    "description": "Manejo ejemplar: TC urgente, control de TA pre-tPA, trombolisis en ventana, monitoreo post-reperfusión y prevención secundaria correcta. Holter detectó FA paroxística; se inició anticoagulación con apixabán. Alta al 5to día con NIHSS 2 y rehabilitación ambulatoria.",
+                    "pearl": "Perla clínica: El tiempo puerta-aguja debe ser <60 minutos. Por cada 15 minutos de reducción en el tiempo de trombolisis, se salvan 4 semanas de vida saludable. El 25% de los ACV isquémicos se deben a FA — siempre investigar con Holter prolongado."
                 },
                 "end_aspirina": {
                     "terminal": True,
@@ -534,7 +704,7 @@ PATHOLOGIES = [
                             "text": "Cirugía urgente — apendicectomía laparoscópica",
                             "correct": True,
                             "feedback": "Correcto. Con diagnóstico confirmado y Alvarado alto, la cirugía urgente es el estándar. La laparoscopia tiene menor tasa de complicaciones y recuperación más rápida que la laparotomía.",
-                            "next": "n3_cirugia"
+                            "next": "n2c_preop"
                         },
                         {
                             "id": "b",
@@ -542,6 +712,32 @@ PATHOLOGIES = [
                             "correct": False,
                             "feedback": "El manejo antibiótico es una opción estudiada en apendicitis no complicada leve, pero con ecografía confirmando inflamación y Alvarado de 8, la cirugía sigue siendo el estándar por menor tasa de fracaso y recurrencia.",
                             "next": "n3_antibioticos"
+                        }
+                    ]
+                },
+                "n2c_preop": {
+                    "description": "El cirujano confirma la indicación quirúrgica. Antes de entrar al quirófano, ¿qué medida preoperatoria es obligatoria?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Antibiótico profiláctico IV (cefazolina) + ayuno confirmado + consentimiento informado",
+                            "correct": True,
+                            "feedback": "Correcto. La profilaxis antibiótica reduce la infección de sitio quirúrgico en un 50%. Debe administrarse 30-60 minutos antes de la incisión. El ayuno y el consentimiento son requisitos éticos y de seguridad.",
+                            "next": "n3_cirugia"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Enema evacuante y rasurado del abdomen completo",
+                            "correct": False,
+                            "feedback": "Incorrecto. Los enemas preoperatorios no tienen indicación en cirugía de urgencia apendicular. El rasurado excesivo aumenta el riesgo de infección. La profilaxis antibiótica IV es la intervención preoperatoria con mayor evidencia.",
+                            "next": "n3_cirugia"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Nada adicional — solo llevar al quirófano de inmediato",
+                            "correct": False,
+                            "feedback": "Incorrecto. Omitir la profilaxis antibiótica aumenta significativamente el riesgo de infección de sitio quirúrgico. El tiempo de 30-60 minutos para prepararla no retrasa peligrosamente la cirugía.",
+                            "next": "end_sin_antibio"
                         }
                     ]
                 },
@@ -572,7 +768,7 @@ PATHOLOGIES = [
                             "text": "Antibióticos IV por 24h (cefazolina) y alta precoz si evolución favorable",
                             "correct": True,
                             "feedback": "Correcto para apendicitis gangrenosa sin perforación. 24h de antibióticos postoperatorios es suficiente. La alta a las 24-48h es segura si el paciente tolera la vía oral y no hay fiebre.",
-                            "next": "end_exito"
+                            "next": "n4_postop_apendice"
                         },
                         {
                             "id": "b",
@@ -609,11 +805,37 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_postop_apendice": {
+                    "description": "A las 20 horas postoperatorias: el paciente toleró líquidos, sin fiebre, herida limpia, peristalsis presente. ¿Cuáles son los criterios para dar el alta hoy?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Tolerar dieta blanda + sin fiebre + dolor controlado con analgesia oral + capacidad de movilizarse",
+                            "correct": True,
+                            "feedback": "Correcto. La alta precoz (24-36h) en apendicitis laparoscópica es segura y reduce el riesgo de infecciones nosocomiales. Se da el alta con ibuprofeno + paracetamol oral, sin antibiótico adicional, y control en 7 días para revisión de herida.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Esperar el resultado del cultivo peritoneal antes del alta",
+                            "correct": False,
+                            "feedback": "Innecesario en este caso. El cultivo peritoneal guía el tratamiento en pacientes que no responden al antibiótico. En apendicitis gangrenosa no perforada con evolución favorable, el alta no debe esperarse por el cultivo (que tarda 48-72h).",
+                            "next": "end_antibio_exceso"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Hospitalizar 5 días para observación — fue apendicitis gangrenosa",
+                            "correct": False,
+                            "feedback": "Innecesario. La gangrena sin perforación no requiere hospitalización prolongada con laparoscopia y buena evolución clínica. La hospitalización innecesaria aumenta costos y riesgo de infecciones nosocomiales.",
+                            "next": "end_antibio_exceso"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Excelente manejo. Diagnóstico eficiente, cirugía oportuna antes de la perforación y manejo postoperatorio correcto. El paciente fue dado de alta a las 36 horas, tolerando dieta oral, sin complicaciones. Control ambulatorio a los 7 días.",
-                    "pearl": "Perla clínica: La apendicitis gangrenosa sin perforación tiene una tasa de complicaciones infecciosas postoperatorias del 5-10%. 24h de antibióticos la reduce a <2%. En apendicitis perforada, se extiende a 4-5 días."
+                    "description": "Manejo integral: profilaxis antibiótica preoperatoria, cirugía laparoscópica, 24h de antibióticos postoperatorios y alta precoz con criterios cumplidos. El paciente fue dado de alta a las 36 horas, tolerando dieta, sin complicaciones. Control a los 7 días sin hallazgos.",
+                    "pearl": "Perla clínica: La apendicitis gangrenosa sin perforación tiene tasa de complicaciones infecciosas del 5-10%. 24h de antibióticos la reduce a <2%. En perforada, se extiende a 4-5 días. La profilaxis preoperatoria con cefazolina es obligatoria en toda cirugía abdominal."
                 },
                 "end_sin_antibio": {
                     "terminal": True,
@@ -742,7 +964,7 @@ PATHOLOGIES = [
                             "text": "Agregar dextrosa al 5% al suero y mantener la insulina — el objetivo es resolver la cetosis, no solo la glucemia",
                             "correct": True,
                             "feedback": "Correcto. Cuando la glucemia llega a 250 mg/dL se agrega dextrosa para poder mantener la insulina corriendo (que resuelve la cetoacidosis). La CAD se resuelve cuando el pH >7.30 y HCO3 >15, no cuando la glucemia es normal.",
-                            "next": "end_exito"
+                            "next": "n4_resolucion_cad"
                         },
                         {
                             "id": "b",
@@ -760,10 +982,55 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_resolucion_cad": {
+                    "description": "A las 12 horas con dextrosa + insulina: pH 7.33, HCO3 16, cetonas (+), glucemia 178 mg/dL. La paciente está alerta y pide comer. ¿Qué haces con la insulina IV?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Continuar insulina IV hasta pH >7.30 + HCO3 >15 + cetonas negativas, luego translapar con insulina SC",
+                            "correct": True,
+                            "feedback": "Correcto. Con pH 7.33 y cetonas aún positivas, la CAD no está resuelta. Se debe mantener insulina IV. Al confirmar resolución (pH >7.30, HCO3 >15, cetonas negativas), se administra insulina SC 1-2h ANTES de suspender el goteo para evitar rebote.",
+                            "next": "n5_transicion_cad"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Suspender insulina IV y pasar directo a insulina SC — ya está alerta y quiere comer",
+                            "correct": False,
+                            "feedback": "Incorrecto. Las cetonas aún son positivas. Suspender la insulina IV con cetonas activas causará rebote de la CAD. La tolerancia oral y el estado de alerta no son criterios de resolución — lo son el pH y el bicarbonato.",
+                            "next": "end_recaida"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Bajar la dosis de insulina a la mitad — la glucemia ya normalizó",
+                            "correct": False,
+                            "feedback": "Incorrecto. La glucemia no es el marcador de resolución de la CAD. Reducir la insulina con cetonas activas permite que la lipolisis continúe y que la cetoacidosis se perpetúe.",
+                            "next": "end_hipoglucemia"
+                        }
+                    ]
+                },
+                "n5_transicion_cad": {
+                    "description": "A las 16h: pH 7.36, HCO3 19, cetonas negativas. CAD resuelta. Se administra insulina glargina SC. ¿Cuándo suspendes el goteo de insulina IV?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "1-2 horas después de la primera dosis de insulina SC basal — para asegurar solapamiento adecuado",
+                            "correct": True,
+                            "feedback": "Correcto. El solapamiento de 1-2h entre insulina SC y el cese del goteo IV es mandatorio. Sin este solapamiento, hay un período sin insulina activa que permite el rebote de la CAD (la insulina IV tiene vida media de solo 4-6 minutos).",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Suspender el goteo justo al poner la insulina SC — son simultáneos",
+                            "correct": False,
+                            "feedback": "Incorrecto. La insulina SC tarda 60-90 minutos en absorberse y actuar. Si se suspende el goteo IV simultáneamente, hay una brecha de cobertura que puede desencadenar rebote de CAD.",
+                            "next": "end_recaida"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Excelente manejo. Diagnóstico con laboratorio completo, secuencia correcta (hidratación → K+ → insulina), y transición a dextrosa al llegar a 250 mg/dL. A las 12h: pH 7.36, HCO3 18, cetonas (-). Paciente alerta. Transición a insulina subcutánea e inicio de educación en ajuste de dosis.",
+                    "description": "Manejo completo: laboratorios previo al tratamiento, secuencia correcta hidratación→K+→insulina, dextrosa al llegar a 250 mg/dL, y transición correcta a insulina SC con solapamiento. Alta al 2do día con HbA1c 11.2%: inicio de educación diabetológica y ajuste de insulinoterapia basal-bolo.",
                     "pearl": "Perla clínica: La CAD se resuelve cuando: pH >7.30, HCO3 >15 mEq/L y cetonas negativas — no cuando la glucemia es normal. Suspender insulina prematuramente es la causa más frecuente de recidiva intrahospitalaria."
                 },
                 "end_recaida": {
@@ -904,7 +1171,33 @@ PATHOLOGIES = [
                     ]
                 },
                 "n3_tcap": {
-                    "description": "La TCAP confirma TEP bilateral con trombos en arterias lobares derechas e izquierda inferior. Disfunción ventricular derecha leve (VD/VI 0.9). Paciente hemodinámicamente estable: TA 105/68 mmHg, FC 115 lpm. ¿Cuál es el tratamiento?",
+                    "description": "La TCAP confirma TEP bilateral con trombos en arterias lobares derechas e izquierda inferior. Disfunción ventricular derecha leve (VD/VI 0.9). Paciente hemodinámicamente estable: TA 105/68 mmHg, FC 115 lpm. Troponina T: 0.08 ng/mL (levemente elevada). ¿Cómo clasificas la gravedad del TEP?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "TEP submasivo (riesgo intermedio): estable hemodinámicamente pero con disfunción VD + troponina elevada",
+                            "correct": True,
+                            "feedback": "Correcto. TEP submasivo = estabilidad hemodinámica + signos de sobrecarga VD (eco o TCAP) ± troponina/BNP elevados. Requiere anticoagulación y monitoreo estrecho. La trombolisis no está indicada de rutina pero sí si deteriora.",
+                            "next": "n3b_tep_tratamiento"
+                        },
+                        {
+                            "id": "b",
+                            "text": "TEP masivo — trombos bilaterales extensos justifican trombolisis urgente",
+                            "correct": False,
+                            "feedback": "Incorrecto. El TEP masivo se define por shock (TA <90 sostenida) o necesidad de reanimación — no por la extensión anatómica. Esta paciente está estable. Clasificarla como masivo llevaría a trombolisis innecesaria.",
+                            "next": "end_trombolisis_exceso"
+                        },
+                        {
+                            "id": "c",
+                            "text": "TEP de bajo riesgo — alta con anticoagulación oral",
+                            "correct": False,
+                            "feedback": "Incorrecto. El bajo riesgo requiere ausencia de disfunción VD y troponina normal. Esta paciente tiene VD/VI 0.9 y troponina elevada = riesgo intermedio. El alta inmediata sin monitoreo sería insegura.",
+                            "next": "end_filtro_mal"
+                        }
+                    ]
+                },
+                "n3b_tep_tratamiento": {
+                    "description": "TEP submasivo confirmado. ¿Cuál es el esquema de anticoagulación de primera línea para esta paciente (sin cáncer activo, sin insuficiencia renal)?",
                     "options": [
                         {
                             "id": "a",
@@ -937,7 +1230,7 @@ PATHOLOGIES = [
                             "text": "3-6 meses de anticoagulación + doppler venoso + evaluar factores de riesgo persistentes",
                             "correct": True,
                             "feedback": "Correcto. TEP provocado por cirugía: 3 meses es suficiente si se removió el factor de riesgo. Se debe investigar trombofilia, malignidad oculta y valorar riesgo-beneficio de extensión del tratamiento.",
-                            "next": "end_exito"
+                            "next": "n5_seguimiento_tep"
                         },
                         {
                             "id": "b",
@@ -948,11 +1241,37 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n5_seguimiento_tep": {
+                    "description": "La paciente completa 3 meses de apixabán. Sin síntomas. Doppler venoso: sin TVP residual. Se solicita estudio de trombofilia (diferido al menos 3 meses post-evento). ¿Suspender o continuar anticoagulación?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Suspender — TEP provocado por factor de riesgo transitorio (cirugía) ya resuelto, 3 meses es suficiente",
+                            "correct": True,
+                            "feedback": "Correcto. El TEP provocado por cirugía (factor transitorio) con 3 meses de anticoagulación tiene tasa de recurrencia anual del 3%, similar al riesgo hemorrágico del tratamiento prolongado. La suspensión es apropiada con seguimiento.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Continuar indefinidamente — tuvo TEP bilateral extenso",
+                            "correct": False,
+                            "feedback": "Innecesario en TEP con causa identificada y removida. La extensión indefinida se considera en TEP no provocado recurrente o con trombofilia de alto riesgo. El riesgo hemorrágico acumulado supera el beneficio en este caso.",
+                            "next": "end_recidiva"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Cambiar a aspirina para protección a largo plazo",
+                            "correct": False,
+                            "feedback": "Incorrecto. La aspirina no previene la recurrencia de TEP de manera efectiva. Si se decide continuar tratamiento, debe ser con anticoagulante a dosis plena o profiláctica, no con antiagregantes.",
+                            "next": "end_filtro_mal"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Manejo ejemplar. Wells → TCAP → anticoagulación correcta → seguimiento apropiado. La paciente completó 3 meses de apixabán. Angiotomografía de control sin trombos residuales. Doppler venoso sin TVP residual. Estratificación de riesgo trombótico para futuros procedimientos realizada.",
-                    "pearl": "Perla clínica: TEP provocado (cirugía, inmovilización, estrógenos) → 3 meses de anticoagulación. TEP no provocado → mínimo 3 meses, evaluar extensión indefinida según riesgo-beneficio. TEP con cáncer activo → HBPM o NACO oncológico indefinido."
+                    "description": "Manejo integral: Wells → TCAP → clasificación como submasivo → anticoagulación con apixabán → 3 meses de tratamiento → alta apropiada. Estudio de trombofilia negativo. Sin recurrencia a 1 año. Estratificación de riesgo trombótico documentada para futuros procedimientos.",
+                    "pearl": "Perla clínica: TEP provocado (cirugía, inmovilización, estrógenos) → 3 meses de anticoagulación. TEP no provocado → mínimo 3 meses, evaluar extensión indefinida. TEP con cáncer activo → HBPM o NACO oncológico indefinido. El submasivo requiere monitoreo hospitalario por riesgo de deterioro."
                 },
                 "end_recidiva": {
                     "terminal": True,
@@ -1081,7 +1400,7 @@ PATHOLOGIES = [
                             "text": "Continuar pip-tazo, ingresar a UCI, control de foco (ecografía renal), repetir lactato",
                             "correct": True,
                             "feedback": "Correcto. La mejora del lactato (clearance >10% en 2h) es un buen signo. Se debe continuar el antibiótico, buscar el foco (posible absceso perinéfrico), y monitorizar en UCI. El antibiótico se ajustará según antibiograma en 24-48h.",
-                            "next": "end_exito"
+                            "next": "n4_foco_sepsis"
                         },
                         {
                             "id": "b",
@@ -1111,11 +1430,56 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_foco_sepsis": {
+                    "description": "Ecografía renal: sin absceso perinéfrico, sin obstrucción. El foco es la infección urinaria alta (pielonefritis). A las 48h: el antibiograma confirma E. coli sensible a ceftriaxona. ¿Cuál es la conducta con el antibiótico?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Rotar a ceftriaxona IV — desescalada guiada por antibiograma, menor espectro y menor costo",
+                            "correct": True,
+                            "feedback": "Correcto. La desescalada antibiótica guiada por antibiograma es un pilar del manejo de sepsis. Reducir el espectro a ceftriaxona (que cubre E. coli sensible) disminuye la presión selectiva, los efectos adversos y los costos.",
+                            "next": "n5_desescalada_sepsis"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Mantener piperacilina-tazobactam — el paciente ya mejoró con este antibiótico",
+                            "correct": False,
+                            "feedback": "Subóptimo. El principio de desescalada es fundamental: una vez que el microorganismo y su sensibilidad son conocidos, se debe reducir el espectro. Mantener antibióticos de amplio espectro innecesariamente genera resistencia.",
+                            "next": "end_recaida_sepsis"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Agregar un segundo antibiótico por cobertura de seguridad",
+                            "correct": False,
+                            "feedback": "Incorrecto. La terapia combinada no tiene beneficio demostrado en bacteriemia por gram-negativos sensibles a un solo antibiótico. Aumenta el riesgo de toxicidad y resistencia sin mejorar el pronóstico.",
+                            "next": "end_fluidos_exceso"
+                        }
+                    ]
+                },
+                "n5_desescalada_sepsis": {
+                    "description": "Al 3er día con ceftriaxona IV: lactato 1.2 mmol/L, TA 118/75 sin vasopresores, diuresis normal, afebril. Creatinina bajó a 1.1 mg/dL. ¿Cuándo y cómo das el alta de UCI?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Traslado a sala general: completar 10-14 días de antibiótico (IV a oral cuando tolere) + control ambulatorio",
+                            "correct": True,
+                            "feedback": "Correcto. En sepsis urinaria por gram-negativo sensible, el total de antibiótico es 10-14 días (7-10 si buena respuesta). La transición IV a oral (ciprofloxacino) es segura una vez el paciente tolere la vía oral y esté afebril.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Alta hospitalaria directa — ya está estable clínicamente",
+                            "correct": False,
+                            "feedback": "Prematuro. Aunque el paciente mejoró, aún necesita completar el antibiótico IV y una transición supervisada a oral. El alta prematura sin completar el tratamiento aumenta el riesgo de recaída y bacteriemia.",
+                            "next": "end_recaida_sepsis"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Bundle de 1 hora cumplido: cultivos + lactato + antibiótico + fluidos. Respuesta hemodinámica adecuada. El cultivo confirmó E. coli sensible. A las 48h se rotó a ceftriaxona IV según antibiograma. Alta de UCI al 5to día, sin secuelas orgánicas.",
-                    "pearl": "Perla clínica: El bundle de la primera hora en sepsis (Surviving Sepsis Campaign): 1) Lactato sérico, 2) Hemocultivos antes del antibiótico, 3) Antibiótico de amplio espectro, 4) 30 mL/kg de cristaloide si hipotensión o lactato >4. Cada hora de demora aumenta mortalidad 7%."
+                    "description": "Bundle de 1 hora cumplido → resucitación efectiva → desescalada antibiótica guiada por antibiograma → ceftriaxona completada 10 días → alta sin secuelas. El urocultivo de control fue negativo. Se identificó HBP como causa de infección urinaria recurrente, referido a urología.",
+                    "pearl": "Perla clínica: El bundle de la primera hora en sepsis: 1) Lactato, 2) Hemocultivos antes del antibiótico, 3) Antibiótico de amplio espectro, 4) 30 mL/kg cristaloide si hipotensión o lactato >4. La desescalada guiada por antibiograma a las 48-72h es mandatoria para reducir resistencias."
                 },
                 "end_recaida_sepsis": {
                     "terminal": True,
@@ -1231,7 +1595,7 @@ PATHOLOGIES = [
                             "text": "Hospitalización, transición a furosemida oral, optimizar IECA y betabloqueante, ecocardiograma",
                             "correct": True,
                             "feedback": "Correcto. La mejoría clínica es buena señal pero el paciente aún no está listo para el alta. Se necesita estabilización con medicación oral, identificar el factor desencadenante (abandono de tratamiento, arritmia, infección) y optimizar la terapia modificadora.",
-                            "next": "end_exito"
+                            "next": "n4_optimizacion_ic"
                         },
                         {
                             "id": "b",
@@ -1242,11 +1606,56 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_optimizacion_ic": {
+                    "description": "Al 2do día: ecocardiograma confirma FE 28%, dilatación del VI. El paciente ya no tiene ortopnea y la SatO2 es 97% con aire ambiente. Se identifica que suspendió la furosemida oral 5 días antes por efectos secundarios. ¿Cuál es el plan de optimización farmacológica?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Optimizar dosis de IECA + BB + agregar espironolactona y evaluar dapagliflozina (4 pilares del GDMT)",
+                            "correct": True,
+                            "feedback": "Correcto. El tratamiento modificador de enfermedad en IC con FE reducida incluye 4 pilares: IECA/ARNI, betabloqueante, ARM (espironolactona) y SGLT2i (dapagliflozina). Cada pilar reduce la mortalidad de manera independiente. La combinación reduce la mortalidad hasta un 60%.",
+                            "next": "n5_alta_ic"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Mantener el tratamiento previo — el paciente ya respondió al tratamiento inicial",
+                            "correct": False,
+                            "feedback": "Oportunidad perdida. La IC con FE 28% está suboptimamente tratada sin espironolactona ni SGLT2i. El ingreso hospitalario es el momento ideal para optimizar el tratamiento modificador de enfermedad.",
+                            "next": "end_alta_precoz2_ic"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Referir a transplante cardíaco — FE 28% es muy baja",
+                            "correct": False,
+                            "feedback": "Prematuro. El transplante se considera en IC avanzada refractaria a tratamiento médico óptimo. Primero se debe optimizar el GDMT (que puede mejorar la FE significativamente) y luego reevaluar a los 3-6 meses.",
+                            "next": "end_vmi_prematuro"
+                        }
+                    ]
+                },
+                "n5_alta_ic": {
+                    "description": "Al 3er día: sin congestión, SatO2 98%, peso bajó 3kg desde el ingreso. Medicación oral ajustada. ¿Cuál es el plan de alta correcto?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Alta con educación sobre peso diario + dieta hiposódica + signos de alarma + control cardiológico en 7 días",
+                            "correct": True,
+                            "feedback": "Correcto. La educación al alta es fundamental para evitar rehospitalizaciones. El control en 7 días permite ajustar medicación, valorar tolerancia y detectar descompensación precoz. La tasa de reingreso a 30 días en IC es del 25% — el seguimiento precoz la reduce a la mitad.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Alta con control en 3 meses en consulta de cardiología",
+                            "correct": False,
+                            "feedback": "Insuficiente. El período de mayor riesgo de reingreso es los primeros 30 días post-alta. El control a los 3 meses es demasiado tardío para detectar y corregir una nueva descompensación. Se necesita control en 7-14 días.",
+                            "next": "end_alta_precoz2_ic"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Manejo correcto: diurético IV + nitratos en ICAD hipertensiva + hospitalización + optimización del tratamiento. El factor desencadenante fue abandono de furosemida por 5 días. Alta al 3er día con educación sobre adherencia, peso diario y signos de alarma. Control cardiológico en 1 semana.",
-                    "pearl": "Perla clínica: El 50% de las descompensaciones de IC tienen un factor desencadenante identificable: transgresión dietética (sal), abandono de medicación, infección, arritmia (FA), isquemia o fármacos (AINEs, calcioantagonistas no dihidropiridínicos)."
+                    "description": "Manejo integral: diurético IV + nitratos → respuesta adecuada → optimización GDMT (IECA+BB+espironolactona+dapagliflozina) → educación al alta + control en 7 días. El factor desencadenante fue abandono de furosemida. A los 6 meses, FE mejoró al 38% con tratamiento optimizado.",
+                    "pearl": "Perla clínica: Los 4 pilares del GDMT en IC-FEr: IECA/ARNI + betabloqueante + ARM + SGLT2i. Cada uno reduce mortalidad independientemente. El SGLT2i (dapagliflozina) reduce hospitalización por IC en 26%. El control en los primeros 7-14 días post-alta reduce reingresos a 30 días en 50%."
                 },
                 "end_liquidos_ic": {
                     "terminal": True,
@@ -1369,7 +1778,7 @@ PATHOLOGIES = [
                             "text": "IBP IV en infusión continua 72h + suspender AINEs + H. pylori en muestra de biopsia",
                             "correct": True,
                             "feedback": "Correcto. Post-hemostasia en úlcera de alto riesgo: IBP IV 72h reduce resangrado (NNT=13). Suspender AINEs es mandatorio. La biopsia para H. pylori identifica la causa tratable más importante de úlcera péptica.",
-                            "next": "end_exito"
+                            "next": "n5_monitoreo_hda"
                         },
                         {
                             "id": "b",
@@ -1380,11 +1789,56 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n5_monitoreo_hda": {
+                    "description": "A las 48h con IBP IV continuo: sin signos de resangrado (TA estable, FC 82, Hb estable en 7.4 g/dL). Biopsia de antro: H. pylori positivo (+++). ¿Cuál es el esquema de erradicación?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Triple terapia 14 días: IBP + amoxicilina + claritromicina (o cuádruple terapia con bismuto si resistencia local >15%)",
+                            "correct": True,
+                            "feedback": "Correcto. La erradicación de H. pylori es mandatoria en úlcera péptica complicada. La triple terapia tiene tasa de erradicación del 70-85%. En zonas con alta resistencia a claritromicina, la cuádruple terapia con bismuto es de primera línea (erradicación >90%).",
+                            "next": "n6_alta_hda"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Solo IBP a largo plazo — el H. pylori se elimina solo con el tiempo",
+                            "correct": False,
+                            "feedback": "Incorrecto. H. pylori no se elimina espontáneamente. Sin erradicación, la recurrencia de úlcera es del 70% a 1 año. El IBP solo suprime los síntomas sin tratar la causa.",
+                            "next": "end_adrenalina_sola"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Confirmar erradicación antes de tratar — puede ser falso positivo",
+                            "correct": False,
+                            "feedback": "Incorrecto. La biopsia (+++++) tiene alta especificidad. En úlcera péptica complicada con H. pylori positivo, se trata siempre. La confirmación de erradicación se hace 4 semanas DESPUÉS del tratamiento con test de aliento o antígeno en heces.",
+                            "next": "end_alta_precoz_hda"
+                        }
+                    ]
+                },
+                "n6_alta_hda": {
+                    "description": "El paciente completó 72h de IBP IV sin resangrado. Inicia erradicación de H. pylori. ¿Con qué indicaciones se le da el alta?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "IBP oral 8 semanas + completar triple terapia 14 días + test de control de erradicación (aliento o antígeno en heces) a las 4 semanas + suspensión definitiva de AINEs",
+                            "correct": True,
+                            "feedback": "Correcto. El IBP oral continúa 8 semanas para cicatrizar la úlcera. La confirmación de erradicación con test de aliento a las 4-8 semanas post-tratamiento es mandatoria (no serología que puede quedar positiva años). Los AINEs deben suspenderse permanentemente o reemplazarse por paracetamol.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Alta sin IBP — la úlcera ya fue tratada endoscópicamente",
+                            "correct": False,
+                            "feedback": "Incorrecto. La hemostasia endoscópica controla el sangrado pero no cicatriza la úlcera. Sin IBP oral, la úlcera puede recidivar y resangrar. Además, los IBP son necesarios durante la erradicación del H. pylori.",
+                            "next": "end_solo_ibp"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Manejo ejemplar: estabilización hemodinámica → endoscopia oportuna → hemostasia combinada → IBP IV 72h → biopsia para H. pylori (positivo, erradicado con triple terapia). Sin resangrado. Alta al 4to día con IBP oral 8 semanas y suspensión definitiva de AINEs.",
-                    "pearl": "Perla clínica: El H. pylori se encuentra en el 70-90% de las úlceras duodenales. Su erradicación reduce la recurrencia del 70% al 5% a 1 año. Siempre biopsiar antro y cuerpo en endoscopia por HDA, y tratar si es positivo."
+                    "description": "Manejo integral: estabilización → endoscopia con hemostasia combinada → IBP IV 72h → H. pylori (+) erradicado con triple terapia → alta con IBP oral 8 semanas → test de aliento a las 4 semanas confirmó erradicación. Sin resangrado a 1 año. AINEs suspendidos definitivamente.",
+                    "pearl": "Perla clínica: H. pylori se encuentra en el 70-90% de las úlceras duodenales. Su erradicación reduce la recurrencia del 70% al 5% a 1 año. La confirmación de erradicación post-tratamiento es mandatoria (test de aliento o antígeno en heces, nunca serología)."
                 },
                 "end_endoscopia_inestable": {
                     "terminal": True,
@@ -1468,7 +1922,7 @@ PATHOLOGIES = [
                             "text": "Continuar ceftriaxona 7 días + dexametasona 4 días + notificación epidemiológica + profilaxis a contactos",
                             "correct": True,
                             "feedback": "Correcto. N. meningitidis es sensible a ceftriaxona (7 días). La dexametasona reduce complicaciones neurológicas (sordera, secuelas) cuando se inicia con o antes del antibiótico. La notificación y profilaxis con rifampicina/ciprofloxacino a contactos cercanos es obligatoria.",
-                            "next": "end_exito"
+                            "next": "n3_evolucion_meningitis"
                         },
                         {
                             "id": "b",
@@ -1498,11 +1952,49 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n3_evolucion_meningitis": {
+                    "description": "A las 48h con ceftriaxona IV: mejoría clínica significativa — Glasgow 15, afebril, rigidez de nuca en resolución. PL de control: PMN 600/mm³, glucosa 55 mg/dL (mejorando). ¿Cuándo y cómo suspendes la dexametasona?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Continuar dexametasona 0.15 mg/kg/6h por 4 días en total, independientemente de la evolución",
+                            "correct": True,
+                            "feedback": "Correcto. La dexametasona debe completarse 4 días completos. Suspenderla antes reduce su beneficio en la prevención de sordera y secuelas neurológicas. El esquema de 4 días está validado con la mejor evidencia en meningitis neumocócica y meningocócica.",
+                            "next": "n4_seguimiento_meningitis"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Suspender la dexametasona al 2do día — el paciente ya mejoró",
+                            "correct": False,
+                            "feedback": "Incorrecto. La dexametasona protege del daño inflamatorio que continúa aunque el paciente mejore clínicamente. Su suspensión prematura aumenta el riesgo de sordera neurosensorial, la complicación más frecuente de la meningitis meningocócica.",
+                            "next": "end_cambio_oral_precoz"
+                        }
+                    ]
+                },
+                "n4_seguimiento_meningitis": {
+                    "description": "Al día 7: el paciente completó ceftriaxona. Al examen neurológico: Glasgow 15, sin déficits focales. Audiometría de cribado: pérdida leve en frecuencias altas en oído derecho. ¿Cuál es el plan al alta?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Alta con audiometría formal en 4 semanas + notificación de casos contactos confirmados + control neurológico",
+                            "correct": True,
+                            "feedback": "Correcto. La sordera neurosensorial es la secuela más frecuente (10-20% de supervivientes). Requiere audiometría formal post-alta para detectar pérdidas que pueden beneficiarse de audífonos o implante coclear. Los contactos cercanos ya deben haber recibido profilaxis.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Alta sin seguimiento — ya completó el antibiótico y está bien clínicamente",
+                            "correct": False,
+                            "feedback": "Insuficiente. La pérdida auditiva puede no ser obvia en la exploración clínica. Sin audiometría formal, una sordera tratable puede quedar sin diagnóstico. Las secuelas neurológicas pueden manifestarse semanas después.",
+                            "next": "end_tardio_meningitis"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Antibiótico precoz (antes de TC y PL), dexametasona, diagnóstico por PL y manejo completo con profilaxis de contactos. El paciente fue dado de alta al día 10 sin secuelas neurológicas. La velocidad de acción fue el factor determinante.",
-                    "pearl": "Perla clínica: Tríada de Kernig + Brudzinski + fiebre tiene especificidad del 95% para meningitis. Pero su ausencia no descarta. En meningitis bacteriana: antibiótico en los primeros 30-60 minutos desde el ingreso, sin importar si la PL o TC están pendientes."
+                    "description": "Antibiótico precoz (antes de TC y PL), dexametasona completa 4 días, diagnóstico por PL, profilaxis de contactos, y seguimiento auditivo. El paciente fue dado de alta al día 7 sin déficits neurológicos. Audiometría a las 4 semanas: normal. La velocidad de acción fue el factor determinante.",
+                    "pearl": "Perla clínica: En meningitis bacteriana: antibiótico en los primeros 30-60 minutos desde el ingreso. La dexametasona ANTES o con el antibiótico reduce sordera en 50% (meningococo) y secuelas cognitivas. La profilaxis con rifampicina a contactos es obligatoria en meningococo."
                 },
                 "end_tardio_meningitis": {
                     "terminal": True,
@@ -1600,7 +2092,7 @@ PATHOLOGIES = [
                             "text": "Progresar dieta a semiblanda + planificar colecistectomía laparoscópica en esta hospitalización o próximos 30 días",
                             "correct": True,
                             "feedback": "Correcto. La tolerancia oral es criterio de mejoría. La colecistectomía debe realizarse durante la misma hospitalización o dentro de las 4 semanas en pancreatitis leve por litiasis — previene recurrencia (riesgo del 25-30% sin cirugía).",
-                            "next": "end_exito"
+                            "next": "n4_cirugia_pancreas"
                         },
                         {
                             "id": "b",
@@ -1611,11 +2103,37 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_cirugia_pancreas": {
+                    "description": "La paciente está en día 3, asintomática, tolerando dieta semiblanda. Eco abdominal: litiasis vesicular múltiple sin dilatación de la vía biliar. ¿Cuándo realizas la colecistectomía?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Colecistectomía laparoscópica en esta misma hospitalización (día 4-5) — segura y reduce riesgo de recurrencia",
+                            "correct": True,
+                            "feedback": "Correcto. La colecistectomía índice (durante la misma hospitalización) en pancreatitis biliar leve es segura y reduce la recurrencia del 25% al 1%. Estudios muestran que es factible si la pancreatitis resolvió clínica y bioquímicamente.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Esperar 6 semanas para operar — la inflamación pancreática puede complicar la cirugía",
+                            "correct": False,
+                            "feedback": "Subóptimo. En pancreatitis leve, esperar 6 semanas expone al paciente a una recurrencia (25% de probabilidad). Las guías recomiendan colecistectomía índice o dentro de las 4 semanas en pancreatitis leve-moderada.",
+                            "next": "end_npt_innecesaria"
+                        },
+                        {
+                            "id": "c",
+                            "text": "No operar — la pancreatitis no recurrirá si la paciente sigue dieta sin grasa",
+                            "correct": False,
+                            "feedback": "Incorrecto. La dieta baja en grasa no previene la migración de cálculos al colédoco. Sin colecistectomía, el 25-30% de los pacientes con pancreatitis biliar recurrirá en los siguientes 3 meses.",
+                            "next": "end_alta_pancreatitis"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Manejo óptimo: hidratación agresiva precoz, analgesia, dieta oral precoz al tolerar y planificación de colecistectomía. Alta al 3er día. Colecistectomía laparoscópica electiva a las 3 semanas sin complicaciones. Sin recurrencia de pancreatitis.",
-                    "pearl": "Perla clínica: El 80% de las pancreatitis agudas son leves y autolimitadas. Los 2 pilares del tratamiento son la hidratación agresiva precoz (Ringer lactato 250-500 mL/h las primeras 12-24h) y la analgesia. La colecistectomía en la misma hospitalización reduce la recurrencia del 25% al 1%."
+                    "description": "Manejo óptimo: hidratación agresiva, analgesia, dieta oral precoz, y colecistectomía laparoscópica índice en día 4. Alta al 5to día. Sin complicaciones quirúrgicas. Sin recurrencia de pancreatitis al año de seguimiento.",
+                    "pearl": "Perla clínica: Los 2 pilares del tratamiento de pancreatitis leve son hidratación agresiva precoz (Ringer lactato, 250-500 mL/h) y analgesia. La colecistectomía en la misma hospitalización reduce recurrencia del 25% al 1%. Los antibióticos profilácticos y la NPT no tienen indicación en pancreatitis leve."
                 },
                 "end_cpre_precoz": {
                     "terminal": True,
@@ -1712,7 +2230,7 @@ PATHOLOGIES = [
                             "text": "Observación 1-4h más, alta con corticoide oral 5-7 días + salbutamol de rescate + control con neumología",
                             "correct": True,
                             "feedback": "Correcto. Peak Flow >60% con buena respuesta clínica permite el alta. El corticoide oral (prednisona 40-50mg/día por 5-7 días) previene la fase tardía. Es mandatorio el seguimiento neumológico para optimizar el tratamiento controlador.",
-                            "next": "end_exito"
+                            "next": "n4_plan_alta_asma"
                         },
                         {
                             "id": "b",
@@ -1730,11 +2248,30 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_plan_alta_asma": {
+                    "description": "Tras 2 horas de observación el paciente está clínicamente bien. Peak Flow 72% del predicho. Refiere que no usa ningún tratamiento controlador habitualmente. ¿Qué incluyes en el plan de alta?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Prednisona oral 5 días + salbutamol de rescate + inicio de corticoide inhalado/LABA + plan de acción por escrito + control neumología en 7 días",
+                            "correct": True,
+                            "feedback": "Correcto. El alta de una crisis severa sin iniciar o ajustar el tratamiento controlador es una oportunidad perdida. El ICS reduce las exacerbaciones en un 80%. El plan de acción escrito (qué hacer si el Peak Flow cae) reduce la mortalidad por asma.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Solo salbutamol de rescate — ya tomará el corticoide oral estos días",
+                            "correct": False,
+                            "feedback": "Insuficiente. Sin tratamiento controlador (ICS/LABA), el riesgo de nueva crisis en los próximos 6 meses es del 40%. El salbutamol de rescate trata los síntomas pero no la inflamación subyacente.",
+                            "next": "end_sin_cortico_oral"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Manejo correcto: SABA + ipratropio nebulizados en 3 ciclos, corticoide IV, O2, observación y alta con corticoide oral + plan de acción escrito. Control con neumología a los 7 días donde se inicia ICS/LABA controlador. Sin recaídas en 6 meses.",
-                    "pearl": "Perla clínica: Toda crisis severa de asma es una oportunidad para revisar el tratamiento controlador. El 60% de los pacientes que consultan a urgencias por asma severa NO usan corticoide inhalado de mantenimiento — la principal causa de crisis evitables."
+                    "description": "Manejo integral: SABA+ipratropio 3 ciclos, corticoide IV, O2, observación, alta con prednisona oral + inicio de ICS/LABA + plan de acción escrito + control neumología en 7 días. Sin recaídas en 12 meses con tratamiento controlador optimizado.",
+                    "pearl": "Perla clínica: Toda crisis severa de asma es oportunidad de optimizar el tratamiento controlador. El 60% de los que consultan a urgencias NO usan ICS de mantenimiento. El plan de acción escrito (zona verde/amarilla/roja según Peak Flow) reduce la mortalidad por asma en un 70%."
                 },
                 "end_mdi_solo": {
                     "terminal": True,
@@ -1812,7 +2349,7 @@ PATHOLOGIES = [
                             "text": "Colación con hidratos de carbono complejos + investigar causa + revisar dosis de insulina + observación 2-4h",
                             "correct": True,
                             "feedback": "Correcto. La dextrosa IV es de acción corta. Se necesita colación con HC complejos para mantener la glucemia. Además, hay que investigar el factor precipitante (omisión de comida, dosis excesiva, ejercicio) y ajustar el esquema insulínico.",
-                            "next": "end_exito"
+                            "next": "n3_causa_hipo"
                         },
                         {
                             "id": "b",
@@ -1842,11 +2379,30 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n3_causa_hipo": {
+                    "description": "La glucemia a la hora es 88 mg/dL, el paciente comió. Revisión de su esquema: insulina glargina 30 UI nocturna + insulina lispro según glucemia. El endocrinólogo fue informado. ¿Cuál es el ajuste correcto?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Reducir glargina en 20% (a 24 UI) + reeducar sobre omisión de comidas + prescribir glucagón domiciliario + control en 48-72h",
+                            "correct": True,
+                            "feedback": "Correcto. La hipoglucemia sintomática indica que la dosis basal es excesiva. Una reducción del 20% es prudente. El glucagón domiciliario para el acompañante es esencial en DM1 con hipoglucemias graves. El seguimiento estrecho confirma que el ajuste fue adecuado.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "No modificar la insulina — fue un evento aislado por omisión de comida",
+                            "correct": False,
+                            "feedback": "Incorrecto. La hipoglucemia grave es siempre señal de desajuste del esquema insulínico. La omisión de comida puede ser el factor precipitante, pero si la dosis basal fuera la correcta, omitir una comida no debería causar hipoglucemia severa con pérdida de consciencia.",
+                            "next": "end_alta_precoz_hipo"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Corrección rápida con dextrosa IV, colación post-tratamiento y revisión del esquema insulínico. Se identificó que la dosis de insulina glargina era excesiva. Se ajustó a la baja y se educó al paciente en reconocimiento de síntomas y manejo domiciliario con glucagón.",
-                    "pearl": "Perla clínica: La regla 15-15 en hipoglucemia leve: 15g de HC simples (3 sobres de azúcar, 150mL jugo) → esperar 15 minutos → medir glucemia. En hipoglucemia grave con compromiso de conciencia: dextrosa IV o glucagón IM. Siempre seguir con HC complejos."
+                    "description": "Corrección rápida con dextrosa IV → colación → identificación de causa → reducción de glargina 20% → prescripción de glucagón domiciliario → control en 48h. Sin recurrencia. HbA1c al mes: 7.2%. Paciente educado en reconocimiento precoz y manejo domiciliario.",
+                    "pearl": "Perla clínica: Hipoglucemia grave = siempre revisar dosis. La regla 15-15 para hipoglucemia leve: 15g HC simples → esperar 15 min → medir. En grave con alteración de conciencia: dextrosa IV + glucagón IM. Siempre seguir con HC complejos. Prescribir glucagón domiciliario en DM1 con hipoglucemias recurrentes."
                 },
                 "end_insulina_mal": {
                     "terminal": True,
@@ -1931,7 +2487,7 @@ PATHOLOGIES = [
                             "text": "Continuar monitoreo, interconsulta a nefrología, no reintroducir AINE nunca, reconsidering IECA cuando creatinina estabilice",
                             "correct": True,
                             "feedback": "Correcto. La IRA prerrenal por nefrotóxicos tiene buena recuperación si la causa se retira a tiempo. El IECA puede reintroducirse con cautela cuando la función renal se normalice. Los AINE están contraindicados en este paciente de forma permanente.",
-                            "next": "end_exito"
+                            "next": "n4_potasio_ira"
                         },
                         {
                             "id": "b",
@@ -1942,11 +2498,37 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_potasio_ira": {
+                    "description": "A los 3 días: creatinina 1.9 mg/dL (↓), diuresis 1.2L/día, pero K+ 5.8 mEq/L. El ECG muestra ondas T picudas en precordiales. ¿Cuál es el manejo de la hiperpotasemia?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Gluconato de calcio IV + bicarbonato + insulina+glucosa + resinas de intercambio (kayexalate) + restricción de K+ en dieta",
+                            "correct": True,
+                            "feedback": "Correcto. Con K+ 5.8 y cambios ECG (ondas T picudas), la hiperpotasemia es moderada-grave. El gluconato de calcio estabiliza la membrana cardíaca (inmediato). Insulina+glucosa desplaza K+ al intracelular (30-60min). Las resinas eliminan K+ a largo plazo.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Solo restricción dietética de potasio — K+ 5.8 es manejable sin medicamentos",
+                            "correct": False,
+                            "feedback": "Insuficiente. Con cambios ECG (ondas T picudas), el K+ 5.8 requiere tratamiento activo. La restricción dietética sola no es suficientemente rápida para prevenir arritmias. El gluconato de calcio es urgente.",
+                            "next": "end_recaida_ira"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Diálisis inmediata — K+ peligroso",
+                            "correct": False,
+                            "feedback": "Prematuro. K+ 5.8 con ondas T picudas sin arritmias sostenidas no es indicación inmediata de diálisis. Primero se tratan médicamente: gluconato de calcio + insulina+glucosa. La diálisis se considera si el K+ no responde o supera 6.5 con ECG severo.",
+                            "next": "end_dialisis_precoz"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Diagnóstico correcto (IRA prerrenal por triple nefrotoxicidad), retiro oportuno de la causa y recuperación completa. Creatinina a los 7 días: 1.1 mg/dL. El paciente fue educado sobre la contraindicación permanente de AINEs y la importancia del monitoreo renal con IECA.",
-                    "pearl": "Perla clínica: La combinación IECA/ARA-II + diurético + AINE se denomina 'triple whammy' — triplica el riesgo de IRA. Es especialmente peligrosa en pacientes mayores con IC, HTA o diabetes. El paracetamol es el analgésico de elección en insuficiencia renal."
+                    "description": "Diagnóstico de IRA prerrenal por triple nefrotoxicidad, retiro oportuno de la causa, manejo correcto de hiperpotasemia con gluconato de calcio + insulina+glucosa, recuperación completa. Creatinina a los 7 días: 1.1 mg/dL. Contraindicación permanente de AINEs documentada.",
+                    "pearl": "Perla clínica: La 'triple whammy' (IECA + diurético + AINE) triplica el riesgo de IRA. Hiperpotasemia con ECG: gluconato de calcio (estabiliza membrana, inmediato) + insulina/glucosa (desplaza K+ intracelular). Indicaciones de diálisis urgente: K+ >6.5 con ECG severo, acidosis refractaria, sobrecarga hídrica, uremia sintomática."
                 },
                 "end_diuretico_ira": {
                     "terminal": True,
@@ -2037,7 +2619,7 @@ PATHOLOGIES = [
                             "text": "Mínimo 4 semanas post-cardioversión + calcular CHA2DS2-VASc para decidir anticoagulación indefinida",
                             "correct": True,
                             "feedback": "Correcto. Post-cardioversión existe riesgo de 'aturdimiento auricular' (la orejuela recupera su contractilidad en 2-4 semanas). Se debe anticoagular mínimo 4 semanas independientemente del CHA2DS2-VASc. Luego evaluar riesgo para decisión de anticoagulación crónica.",
-                            "next": "end_exito"
+                            "next": "n4_anticoag_fa"
                         },
                         {
                             "id": "b",
@@ -2048,11 +2630,30 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_anticoag_fa": {
+                    "description": "A las 4 semanas post-cardioversión, la paciente vuelve a control. Ritmo sinusal mantenido. CHA2DS2-VASc calculado: 2 puntos (sexo femenino + edad 58). ¿Anticoagulación indefinida?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Sí — CHA2DS2-VASc ≥2 en mujeres indica anticoagulación crónica con NACO (apixabán o rivaroxabán)",
+                            "correct": True,
+                            "feedback": "Correcto. En mujeres, el umbral de anticoagulación es CHA2DS2-VASc ≥3 (en hombres ≥2). Esta paciente tiene 2 puntos (siendo mujer 1 punto), así que la anticoagulación es opcional pero recomendable dado su riesgo. Los NACOs son superiores a warfarina en FA no valvular.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "No — está en ritmo sinusal y el riesgo es bajo",
+                            "correct": False,
+                            "feedback": "Incorrecto. La FA puede recurrirde forma silente (FA asintomática o paroxística). El riesgo tromboembólico no desaparece con la cardioversión exitosa — la orejuela izquierda puede seguir funcionando anómalamente. La anticoagulación se basa en el CHA2DS2-VASc, no en el ritmo actual.",
+                            "next": "end_sin_anticoag_post_fa"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Manejo correcto: control de FC → anticoagulación → ETE → cardioversión segura → 4 semanas de anticoagulación post-CV. CHA2DS2-VASc: 2 puntos (mujer + edad 58). Se indica anticoagulación crónica con apixabán. Control con cardiología para evaluar antiarrítmico de mantenimiento.",
-                    "pearl": "Perla clínica: CHA2DS2-VASc: Insuficiencia cardíaca(1) + HTA(1) + Edad ≥75(2) + Diabetes(1) + ACV previo(2) + Vasculopatía(1) + Edad 65-74(1) + Sexo femenino(1). Anticoagular si ≥2 en hombres o ≥3 en mujeres. La FA es responsable del 15-20% de todos los ACV."
+                    "description": "Manejo integral: control de FC → anticoagulación → ETE negativo → cardioversión eléctrica → 4 semanas post-CV → anticoagulación crónica con apixabán (CHA2DS2-VASc 2). Control con cardiología al mes: ritmo sinusal mantenido. Sin ACV ni recidiva de FA a 1 año.",
+                    "pearl": "Perla clínica: CHA2DS2-VASc: IC(1)+HTA(1)+Edad ≥75(2)+DM(1)+ACV previo(2)+Vasculopatía(1)+Edad 65-74(1)+Sexo femenino(1). Anticoagular si ≥2 en hombres o ≥3 en mujeres. La FA causa el 15-20% de todos los ACV. El ritmo sinusal post-cardioversión no elimina el riesgo: la FA recurre en 50% al año."
                 },
                 "end_cardioversion_sin_anticoag": {
                     "terminal": True,
@@ -2124,7 +2725,7 @@ PATHOLOGIES = [
                             "text": "Repetir adrenalina si no hay respuesta completa + SF IV 500-1000 mL + difenhidramina + corticoide + observación 4-8h",
                             "correct": True,
                             "feedback": "Correcto. La adrenalina puede repetirse cada 5-15 minutos si la respuesta es incompleta. Los fluidos IV tratan el shock distributivo. Los antihistamínicos y corticoides previenen reacciones bifásicas. La observación de 4-8h es mandatoria por riesgo de reacción bifásica.",
-                            "next": "end_exito"
+                            "next": "n3_observacion_anafi"
                         },
                         {
                             "id": "b",
@@ -2135,11 +2736,49 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n3_observacion_anafi": {
+                    "description": "A las 2h: TA 118/76, FC 88, urticaria en resolución, sin estridor. Paciente estable. ¿Cuánto tiempo debe observarse?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Observación total de 6-8h en urgencias — riesgo de reacción bifásica en las primeras 8 horas",
+                            "correct": True,
+                            "feedback": "Correcto. La reacción bifásica ocurre en el 5-20% de las anafilaxias graves, típicamente 1-8h después. Los factores de riesgo (anafilaxia grave inicial, retraso en adrenalina, anafilaxia idiopática) justifican la observación prolongada.",
+                            "next": "n4_alta_anafi"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Alta a las 2h — ya está estable y sin síntomas",
+                            "correct": False,
+                            "feedback": "Prematuro. La estabilidad a las 2h no garantiza que no habrá reacción bifásica. La observación mínima de 4-6h (y hasta 24h en anafilaxias graves) es el estándar internacional.",
+                            "next": "end_alta_precoz_anafi"
+                        }
+                    ]
+                },
+                "n4_alta_anafi": {
+                    "description": "A las 7 horas sin síntomas. Lista para el alta. ¿Qué incluyes en el plan de alta?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Autoinyector de adrenalina + entrenamiento en su uso + prednisona 5 días + antihistamínico oral + derivación a alergología + contraindicación documentada de penicilina",
+                            "correct": True,
+                            "feedback": "Correcto. El autoinyector de adrenalina es mandatorio en toda anafilaxia. Sin él, una reacción futura puede ser fatal. La documentación de la alergia evita exposiciones futuras. La alergología evaluará si existe alergia cruzada con cefalosporinas (15-20% de riesgo).",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Alta con antihistamínico oral y evitar penicilina — no hace falta más",
+                            "correct": False,
+                            "feedback": "Insuficiente. Sin autoinyector de adrenalina, si hay una exposición accidental futura (alimentos contaminados, medicamentos no etiquetados), la paciente no podrá autotratarse. El antihistamínico oral no trata la anafilaxia aguda.",
+                            "next": "end_alta_precoz_anafi"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Adrenalina IM inmediata, fluidos IV, antihistamínicos y corticoides. Observación 6h sin reacción bifásica. Alta con autoinyector de adrenalina (EpiPen), pulsera de alergia a penicilina, antihistamínico oral 3 días, prednisona 5 días y derivación a alergología. Contraindicación permanente de betalactámicos documentada.",
-                    "pearl": "Perla clínica: Toda persona con anafilaxia debe irse de alta con: 1) Autoinyector de adrenalina y entrenamiento en su uso, 2) Plan de acción escrito, 3) Identificación del alérgeno, 4) Derivación a alergología, 5) Corticoide oral 5 días para prevenir fase tardía."
+                    "description": "Adrenalina IM inmediata → fluidos + difenhidramina + corticoide → observación 7h sin reacción bifásica → alta con EpiPen + entrenamiento + prednisona 5 días + antihistamínico + derivación a alergología. Contraindicación de betalactámicos documentada en historia clínica.",
+                    "pearl": "Perla clínica: Alta de anafilaxia: 1) EpiPen y entrenamiento, 2) Plan de acción escrito, 3) Identificar el alérgeno, 4) Corticoide oral 5 días, 5) Derivación a alergología. La reacción bifásica ocurre en 5-20% de los casos: observar 6-8h mínimo antes del alta."
                 },
                 "end_antihistaminico": {
                     "terminal": True,
@@ -2224,7 +2863,7 @@ PATHOLOGIES = [
                             "text": "TC de cráneo + EEG + investigar causa + monitoreo neurológico + continuar antiepiléplico",
                             "correct": True,
                             "feedback": "Correcto. Todo status epiléptico requiere identificar la causa: no adherencia al tratamiento, cambio de fármaco, trastorno metabólico, lesión estructural nueva, encefalitis. TC para descartar sangrado o masa. EEG para confirmar cese de actividad eléctrica y descartar status no convulsivo.",
-                            "next": "end_exito"
+                            "next": "n4_causa_status"
                         },
                         {
                             "id": "b",
@@ -2254,11 +2893,30 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_causa_status": {
+                    "description": "TC cerebral: normal. EEG: sin actividad epiléptica residual. Analítica: nivel de levetiracetam subterapéutico (5 mcg/mL, VN 12-46). El paciente refiere vómitos las últimas 24h que le impidieron tomar el medicamento. ¿Cuál es el plan?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Recargar levetiracetam IV + ajustar la dosis de mantenimiento + educación sobre qué hacer si vomita la medicación",
+                            "correct": True,
+                            "feedback": "Correcto. La causa fue nivel subterapéutico por malabsorción. Se recarga el fármaco por vía IV para alcanzar niveles terapéuticos rápidamente. La educación es clave: si vomita la medicación, debe consultar o usar la formulación IV/IM alternativa. Un plan de acción claro previene recurrencias.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Cambiar a otro antiepiléptico — el levetiracetam 'falló'",
+                            "correct": False,
+                            "feedback": "Incorrecto. El levetiracetam no falló — su nivel era subterapéutico por mala absorción. Cambiar el fármaco sin identificar la causa real del status es un error. El tratamiento correcto es restablecer el nivel terapéutico y tratar la causa de los vómitos.",
+                            "next": "end_fenitoina_primero"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Status controlado en 21 minutos con protocolo correcto: BZD → segunda línea. TC normal. EEG sin actividad epiléptica. Causa: nivel subterapéutico de levetiracetam (paciente refiere vómitos ese día). Ajuste de dosis y agregado de valproato. Alta al 3er día sin nuevas crisis.",
-                    "pearl": "Perla clínica: Protocolo del status epiléptico por tiempo: 0-5min: BZD (lorazepam/diazepam). 10-20min: Segunda línea (levetiracetam/valproato/fenitoína). 20-40min: Status refractario → anestesia (propofol/midazolam). Cada etapa tiene 10 minutos de margen. El tiempo es neurona."
+                    "description": "Status controlado en 21 min: BZD → levetiracetam IV. TC normal. EEG: sin actividad epiléptica. Causa identificada: nivel subterapéutico por vómitos. Recarga IV + ajuste de dosis + educación. Alta al 3er día sin nuevas crisis. Nivel a los 30 días en rango terapéutico.",
+                    "pearl": "Perla clínica: Protocolo del status: 0-5min BZD → 10-20min 2ª línea (levetiracetam/valproato/fenitoína) → 20-40min anestesia. Siempre investigar la causa: nivel subterapéutico, lesión estructural nueva, trastorno metabólico, infección del SNC. El EEG es mandatorio para descartar status no convulsivo."
                 },
                 "end_espera_status": {
                     "terminal": True,
@@ -2336,7 +2994,7 @@ PATHOLOGIES = [
                             "text": "Colecistectomía laparoscópica dentro de las primeras 72h del inicio de síntomas",
                             "correct": True,
                             "feedback": "Correcto. Las guías de Tokio recomiendan colecistectomía laparoscópica precoz (dentro de las 72h) en colecistitis Grado I y II como paciente operable. La cirugía precoz reduce la morbilidad, la estadía hospitalaria y los costos comparada con la cirugía diferida.",
-                            "next": "end_exito"
+                            "next": "n3_colecistectomia"
                         },
                         {
                             "id": "b",
@@ -2347,11 +3005,56 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n3_colecistectomia": {
+                    "description": "Se indica colecistectomía laparoscópica precoz. La paciente pregunta si hay riesgo de complicaciones con la cirugía tan pronto. ¿Cómo manejas el momento quirúrgico?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Cirugía en las próximas 24h — la colecistectomía precoz (<72h) es más segura que la diferida en Grado I",
+                            "correct": True,
+                            "feedback": "Correcto. La cirugía precoz en colecistitis leve tiene menor tasa de complicaciones, menor conversión a laparotomía y menor estadía que la diferida. El edema agudo y la friabilidad de las primeras 72h son manejables laparoscópicamente.",
+                            "next": "n4_postop_cole"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Esperar 24-48h de antibióticos para 'enfriar' la inflamación antes de operar",
+                            "correct": False,
+                            "feedback": "Concepto superado. Los antibióticos no 'enfrían' la colecistitis de forma significativa. La cirugía laparoscópica puede realizarse con seguridad en las primeras 72h sin esperar a la mejoría antibiótica. El retraso aumenta el riesgo de progresión.",
+                            "next": "end_conservador_colecistitis"
+                        },
+                        {
+                            "id": "c",
+                            "text": "Colecistostomía percutánea primero — operar con inflamación aguda es muy riesgoso",
+                            "correct": False,
+                            "feedback": "Incorrecto en paciente de bajo riesgo. La colecistostomía es para colecistitis grave (Grado III) en pacientes con alto riesgo quirúrgico (ASA IV, disfunción orgánica). En esta paciente joven con colecistitis leve, la laparoscopia es segura.",
+                            "next": "end_alta_colecistitis"
+                        }
+                    ]
+                },
+                "n4_postop_cole": {
+                    "description": "La colecistectomía laparoscópica se realizó sin complicaciones. La colangiografía intraoperatoria mostró colédoco libre. El paciente está en sala de recuperación. ¿Cuándo puedes dar el alta?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "Alta a las 24h si tolera dieta, sin fiebre, dolor controlado con analgesia oral",
+                            "correct": True,
+                            "feedback": "Correcto. La colecistectomía laparoscópica sin complicaciones permite el alta a las 24h e incluso en algunos centros el mismo día (cirugía ambulatoria). Los criterios son: tolerancia oral, afebrilia, dolor controlado y movilidad.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Alta a los 5 días para asegurar que no haya complicaciones",
+                            "correct": False,
+                            "feedback": "Excesivo. La hospitalización prolongada sin indicación aumenta el riesgo de infecciones nosocomiales y TVP. La colecistectomía laparoscópica sin complicaciones tiene criterios de alta a las 24-48h como máximo.",
+                            "next": "end_conservador_colecistitis"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Diagnóstico correcto con criterios de Tokio y ecografía. Colecistectomía laparoscópica a las 28h del ingreso sin complicaciones. Tiempo quirúrgico 45 minutos. Alta al día siguiente de la cirugía. Sin conversión a laparotomía abierta.",
-                    "pearl": "Perla clínica: La colecistectomía laparoscópica precoz (<72h del inicio de síntomas) en colecistitis aguda Grado I-II tiene menor tasa de complicaciones que la cirugía diferida. Después de las 72h, la inflamación y fibrosis aumentan el riesgo quirúrgico. La ventana óptima es las primeras 24-48h."
+                    "description": "Diagnóstico correcto con criterios de Tokio y ecografía, colecistectomía laparoscópica a las 28h, colangiografía intraoperatoria sin cálculos en colédoco, alta al día siguiente. Sin complicaciones. La colecistectomía precoz evitó una recurrencia inminente.",
+                    "pearl": "Perla clínica: La colecistectomía laparoscópica precoz (<72h) en colecistitis Grado I-II reduce la morbilidad y la estadía vs. cirugía diferida. La colangiografía intraoperatoria detecta coledocolitiasis residual en el 5-10% de los casos. La ventana óptima es las primeras 24-48h del inicio de síntomas."
                 },
                 "end_alta_colecistitis": {
                     "terminal": True,
@@ -2436,7 +3139,7 @@ PATHOLOGIES = [
                             "text": "Doble antiagregación 12 meses (AAS + ticagrelor) + betabloqueante + IECA + estatina alta intensidad",
                             "correct": True,
                             "feedback": "Correcto. Post-IAMSEST con stent: DAAT por 12 meses mínimo (previene trombosis del stent), betabloqueante (reduce mortalidad), IECA (remodelado ventricular) y estatina de alta intensidad (reduce LDL <70 mg/dL y estabiliza placa).",
-                            "next": "end_exito"
+                            "next": "n4_alta_iamsest"
                         },
                         {
                             "id": "b",
@@ -2447,11 +3150,30 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_alta_iamsest": {
+                    "description": "Al 2do día post-ATC: paciente asintomático, ECG sin cambios dinámicos. Se planifica el alta. ¿Qué objetivos de LDL y TA llevas al alta?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "LDL objetivo <55-70 mg/dL (estatina de alta intensidad) + TA <130/80 mmHg + HbA1c <7% + dejar de fumar",
+                            "correct": True,
+                            "feedback": "Correcto. Post-síndrome coronario agudo, los objetivos son muy estrictos: LDL <55 mg/dL según ESC 2021 (o <70 mg/dL según AHA), TA <130/80, HbA1c <7% en diabéticos, cese total del tabaco. Estos objetivos reducen la mortalidad cardiovascular un 50% en 5 años.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "LDL <100 mg/dL como en prevención primaria — ya se dio la estatina",
+                            "correct": False,
+                            "feedback": "Insuficiente. Los objetivos post-SCA son más estrictos que los de prevención primaria. El LDL objetivo es <55-70 mg/dL en muy alto riesgo (SCA reciente). Si no se alcanza con estatina sola, agregar ezetimiba o inhibidor de PCSK9.",
+                            "next": "end_monoterapia_iamsest"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Estratificación correcta con GRACE, estrategia invasiva precoz dentro de las 24h y tratamiento médico óptimo al alta. A los 12 meses: sin eventos cardiovasculares mayores, LDL 58 mg/dL, FE estable en 55%. Modificación de factores de riesgo en curso.",
-                    "pearl": "Perla clínica: IAMSEST vs IAMCEST: en el IAMCEST la arteria está 100% ocluida → cateterismo inmediato (<90min). En el IAMSEST hay oclusión parcial o subtotal → estratificación con GRACE → cateterismo según riesgo (<2h, <24h o <72h). La diferencia en el ECG: elevación ST (IAMCEST) vs depresión ST o sin cambios (IAMSEST)."
+                    "description": "Estratificación GRACE correcta, coronariografía <24h, ATC exitosa, DAAT 12 meses, y objetivos LDL/TA estrictos al alta. A los 12 meses: LDL 48 mg/dL, FE 55%, sin eventos cardiovasculares. El paciente dejó de fumar y perdió 8kg.",
+                    "pearl": "Perla clínica: IAMSEST: estratificar con GRACE → invasivo <24h si >140 puntos. Post-stent: DAAT 12 meses (AAS+ticagrelor). Objetivos al alta: LDL <55-70, TA <130/80, HbA1c <7%, cese tabaco. Cada objetivo alcanzado reduce la mortalidad cardiovascular de forma independiente."
                 },
                 "end_cateterismo_innecesario": {
                     "terminal": True,
@@ -2549,7 +3271,7 @@ PATHOLOGIES = [
                             "text": "Continuar VNI nocturna + completar antibiótico 5-7 días + corticoide 5 días + fisioterapia respiratoria",
                             "correct": True,
                             "feedback": "Correcto. La respuesta a las 4h es un buen predictor de éxito de la VNI. Se continúa de forma discontinua (con descansos para comidas y movilización). El antibiótico y corticoide se completan. La fisioterapia ayuda a movilizar secreciones.",
-                            "next": "end_exito"
+                            "next": "n4_alta_epoc"
                         },
                         {
                             "id": "b",
@@ -2560,11 +3282,30 @@ PATHOLOGIES = [
                         }
                     ]
                 },
+                "n4_alta_epoc": {
+                    "description": "Al 5to día: pH 7.39, PaCO2 52 mmHg, SatO2 90% con FiO2 28%. Usa la VNI solo de noche. Expectoración clara. Ya puede completar frases. ¿Cuál es el plan al alta?",
+                    "options": [
+                        {
+                            "id": "a",
+                            "text": "O2 domiciliario continuo (si PaO2 <55 mmHg en estado basal) + VNI domiciliaria nocturna + rehabilitación pulmonar + consejería antitabaco intensiva",
+                            "correct": True,
+                            "feedback": "Correcto. El O2 domiciliario en EPOC grave (PaO2 <55 mmHg o <60 con cor pulmonale) reduce la mortalidad en un 50%. La rehabilitación pulmonar es la intervención no farmacológica más efectiva en EPOC: mejora la capacidad de ejercicio y reduce hospitalizaciones.",
+                            "next": "end_exito"
+                        },
+                        {
+                            "id": "b",
+                            "text": "Alta con el mismo inhalador de siempre — ya se recuperó de la exacerbación",
+                            "correct": False,
+                            "feedback": "Oportunidad perdida. El ingreso hospitalario por exacerbación EPOC es el momento ideal para optimizar el tratamiento: verificar técnica inhalatoria, añadir VNI domiciliaria si tiene hipercapnia crónica, referir a rehabilitación pulmonar y reforzar el abandono del tabaco.",
+                            "next": "end_retirar_vni_precoz"
+                        }
+                    ]
+                },
                 "end_exito": {
                     "terminal": True,
                     "result": "success",
-                    "description": "Manejo correcto: O2 controlado, broncodilatadores, corticoide sistémico, antibiótico (amoxicilina-clavulánico) y VNI precoz ante acidosis. Alta al 6to día con O2 domiciliario, VNI nocturna domiciliaria y derivación a rehabilitación pulmonar. Abandono del tabaco reforzado.",
-                    "pearl": "Perla clínica: La VNI en EPOC exacerbado grave (pH 7.25-7.35) reduce la mortalidad en un 50%, la necesidad de intubación en un 65% y la estadía hospitalaria en 3 días. Es uno de los tratamientos con mayor nivel de evidencia en medicina intensiva."
+                    "description": "Manejo integral: O2 controlado 28% → broncodilatadores → corticoide + antibiótico → VNI por acidosis → respuesta favorable en 4h → alta al 6to día con O2 domiciliario, VNI nocturna y rehabilitación pulmonar. Tabaco abandonado. Sin reingresos en 6 meses.",
+                    "pearl": "Perla clínica: La VNI en EPOC exacerbado grave (pH 7.25-7.35) reduce la mortalidad 50%, las intubaciones 65% y la estadía hospitalaria 3 días. O2 domiciliario continuo en EPOC grave reduce mortalidad 50%. La rehabilitación pulmonar reduce rehospitalizaciones en 40%."
                 },
                 "end_o2_alto_epoc": {
                     "terminal": True,
