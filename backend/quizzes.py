@@ -118,6 +118,34 @@ QUIZZES = [
                     {"id": "d", "text": "Anticoagulación IV y esperar estabilización espontánea", "correct": False,
                      "explanation": "Con TA 78/50, shock hemodinámico y alteración del sensorio, esperar no es una opción. La cardioversión es la única medida que puede estabilizar al paciente en minutos."}
                 ]
+            },
+            {
+                "id": "q9", "type": "multi",
+                "hint": "Piensa en los 5 fármacos con evidencia clase I que reducen mortalidad post-IAM de forma independiente.",
+                "text": "¿Cuáles de los siguientes fármacos forman parte del tratamiento obligatorio al alta post-IAMCEST con stent? (Selecciona TODOS los correctos)",
+                "multi_explanation": "El tratamiento post-IAM tiene 5 pilares con evidencia clase I: doble antiagregación (AAS + inhibidor P2Y12), betabloqueante (reduce la mortalidad un 23%), IECA/ARA-II (previene el remodelado ventricular) y estatina de alta intensidad (estabiliza la placa). Los antibióticos y los AINEs no tienen ningún papel.",
+                "options": [
+                    {"id": "a", "text": "AAS 100 mg/día indefinida",                                "correct": True,  "explanation": "Correcto. Antiagregante basal de por vida post-IAM."},
+                    {"id": "b", "text": "Ticagrelor o clopidogrel por 12 meses",                    "correct": True,  "explanation": "Correcto. Doble antiagregación 12 meses para prevenir trombosis del stent."},
+                    {"id": "c", "text": "Betabloqueante (carvedilol o metoprolol)",                  "correct": True,  "explanation": "Correcto. Reduce mortalidad post-IAM en un 23%."},
+                    {"id": "d", "text": "IECA o ARA-II",                                             "correct": True,  "explanation": "Correcto. Previene el remodelado ventricular adverso."},
+                    {"id": "e", "text": "Estatina de alta intensidad (atorvastatina 40-80 mg)",      "correct": True,  "explanation": "Correcto. LDL objetivo <55-70 mg/dL post-SCA."},
+                    {"id": "f", "text": "Antibiótico profiláctico oral 7 días",                     "correct": False, "explanation": "Incorrecto. Los antibióticos no tienen ninguna indicación en el IAM no complicado."}
+                ]
+            },
+            {
+                "id": "q10", "type": "order",
+                "hint": "Primero diagnóstico, luego activar el sistema, luego premedicación, luego procedimiento.",
+                "text": "Ordena los pasos del manejo del IAMCEST desde el ingreso a urgencias:",
+                "correct_order": ["a", "b", "c", "d", "e"],
+                "explanation": "El protocolo IAMCEST sigue una secuencia estricta: ECG diagnóstico en <10 min → activar código IAM → premedicación antitrombótica → traslado a hemodinamia → ICPP. El tiempo puerta-balón <90 minutos es el indicador de calidad más importante. Cada eslabón de esta cadena debe hacerse en paralelo para minimizar el tiempo.",
+                "items": [
+                    {"id": "a", "text": "ECG de 12 derivaciones en menos de 10 minutos desde el ingreso"},
+                    {"id": "b", "text": "Activar código IAM y avisar a hemodinamia"},
+                    {"id": "c", "text": "Doble antiagregación (AAS + ticagrelor) + heparina IV"},
+                    {"id": "d", "text": "Traslado urgente al laboratorio de hemodinamia"},
+                    {"id": "e", "text": "Angioplastia primaria (ICPP) con implante de stent"}
+                ]
             }
         ]
     },
@@ -226,6 +254,33 @@ QUIZZES = [
                     {"id": "d", "text": "No hacer RxTx de control a las 24h", "correct": False,
                      "explanation": "La RxTx de control no se realiza rutinariamente a las 24h sino al alta o a las 4-8 semanas. No es el error habitual en el manejo inicial."}
                 ]
+            },
+            {
+                "id": "q8", "type": "multi",
+                "hint": "Piensa en cuáles son los criterios que definen la ventana de intubación vs. VNI en el EPOC.",
+                "text": "¿Cuáles de las siguientes son indicaciones de VNI (ventilación no invasiva) en la exacerbación grave de EPOC? (Selecciona TODAS las correctas)",
+                "multi_explanation": "La VNI está indicada cuando hay acidosis respiratoria hipercápnica (pH 7.25-7.35), disnea severa con uso de músculos accesorios, o FR >25 rpm. Está contraindicada si el paciente no coopera, tiene secreciones abundantes que no puede manejar, o hay paro respiratorio inminente (que requiere intubación directa). La hipoxemia aislada sin hipercapnia es más propia de la NIV en edema pulmonar.",
+                "options": [
+                    {"id": "a", "text": "pH 7.28 con PaCO2 72 mmHg en paciente alerta",        "correct": True,  "explanation": "Correcto. Acidosis respiratoria hipercápnica sin contraindicaciones es la indicación principal."},
+                    {"id": "b", "text": "FR 32 rpm con uso intenso de músculos accesorios",     "correct": True,  "explanation": "Correcto. Trabajo respiratorio elevado con riesgo de fatiga es indicación de VNI precoz."},
+                    {"id": "c", "text": "Paciente agitado que no tolera la máscara",              "correct": False, "explanation": "Incorrecto. La agitación severa que impide colocar la máscara es contraindicación de VNI."},
+                    {"id": "d", "text": "Disnea grave con hipercapnia en paciente cooperador",   "correct": True,  "explanation": "Correcto. La cooperación del paciente es requisito para la VNI — si el paciente es cooperador, la VNI es la primera línea."},
+                    {"id": "e", "text": "Paro respiratorio con apnea",                           "correct": False, "explanation": "Incorrecto. El paro respiratorio requiere intubación inmediata, no VNI."}
+                ]
+            },
+            {
+                "id": "q9", "type": "order",
+                "hint": "En el TEP: primero sospechar, luego estratificar, luego confirmar, luego tratar.",
+                "text": "Ordena el algoritmo diagnóstico-terapéutico correcto ante sospecha de TEP en urgencias:",
+                "correct_order": ["a", "b", "c", "d", "e"],
+                "explanation": "El manejo del TEP sigue este orden: 1) Sospechar clínicamente (síntomas + factores de riesgo), 2) Calcular score de Wells para probabilidad pretest, 3) Si probabilidad alta → TCAP directamente; si baja/media → dímero D primero, 4) Confirmar con TCAP, 5) Anticoagular según el tipo (masivo, submasivo o de bajo riesgo). Saltarse la estratificación lleva a sobrediagnosticar o infradiagnosticar el TEP.",
+                "items": [
+                    {"id": "a", "text": "Sospecha clínica: disnea brusca + taquicardia + factor de riesgo"},
+                    {"id": "b", "text": "Calcular score de Wells para probabilidad pretest"},
+                    {"id": "c", "text": "Si Wells alto: TC angiografía pulmonar directa (sin dímero D)"},
+                    {"id": "d", "text": "TCAP confirma TEP bilateral con disfunción VD leve"},
+                    {"id": "e", "text": "Anticoagulación con NACO o HBPM (TEP sin shock)"}
+                ]
             }
         ]
     },
@@ -319,6 +374,34 @@ QUIZZES = [
                      "explanation": "Retener analgesia sin causa no es correcto. El manejo del dolor no interfiere con el diagnóstico de HSA."},
                     {"id": "d", "text": "Pedir EEG para descartar crisis epiléptica", "correct": False,
                      "explanation": "La cefalea en trueno de inicio en segundos es un patrón diferente a la cefalea postcrítica. El EEG no es el estudio indicado aquí."}
+                ]
+            },
+            {
+                "id": "q7", "type": "multi",
+                "hint": "El ACV tiene varias contraindicaciones absolutas para trombolisis. Algunas sorprenden.",
+                "text": "¿Cuáles de las siguientes son contraindicaciones ABSOLUTAS para trombolisis IV con alteplase en el ACV isquémico? (Selecciona TODAS las correctas)",
+                "multi_explanation": "Las contraindicaciones absolutas para tPA en ACV incluyen: hemorragia intracraneal en TC, TA >185/110 no controlable, cirugía o trauma mayor en últimas 2 semanas, ACV o TCE en los últimos 3 meses, y anticoagulación activa. Un ACV de hace 5 años NO es contraindicación. La TA elevada puede controlarse con labetalol antes de dar el tPA.",
+                "options": [
+                    {"id": "a", "text": "Hemorragia intracraneal en la TC sin contraste",              "correct": True,  "explanation": "Contraindicación absoluta — el tPA empeoraría la hemorragia."},
+                    {"id": "b", "text": "TA 185/115 mmHg no controlable con labetalol IV",             "correct": True,  "explanation": "Contraindicación absoluta si no se puede bajar a <185/110 antes del tPA."},
+                    {"id": "c", "text": "ACV isquémico hace 5 años (sin secuelas graves)",             "correct": False, "explanation": "No es contraindicación. Solo los ACV en los últimos 3 meses son contraindicación."},
+                    {"id": "d", "text": "Cirugía mayor abdominal hace 10 días",                         "correct": True,  "explanation": "Cirugía mayor en las últimas 2 semanas es contraindicación absoluta por riesgo de sangrado en el sitio quirúrgico."},
+                    {"id": "e", "text": "Anticoagulación activa con dabigatrán (última dosis hace 24h)", "correct": True,  "explanation": "La anticoagulación activa con dabigatrán es contraindicación. Existe antídoto (idarucizumab), pero su disponibilidad es variable."},
+                    {"id": "f", "text": "Glucemia 130 mg/dL",                                           "correct": False, "explanation": "No es contraindicación. El rango permitido es 50-400 mg/dL. La glucemia normal no contraindica el tPA."}
+                ]
+            },
+            {
+                "id": "q8", "type": "order",
+                "hint": "En el status: benzodiacepinas primero, luego segunda línea, nunca esperes más de 10 minutos entre escalones.",
+                "text": "Ordena el protocolo de manejo del status epiléptico convulsivo por tiempo:",
+                "correct_order": ["a", "b", "c", "d", "e"],
+                "explanation": "El protocolo del status sigue una escalada estricta por tiempo: 0-5min acceso venoso + BZD, si falla a los 10min segunda línea IV (levetiracetam/valproato), si falla a los 20-30min anestesia general con intubación. La clave es no esperar — cada paso tiene 10 minutos de margen máximo. Esperar más destruye neuronas.",
+                "items": [
+                    {"id": "a", "text": "0-5 min: acceso venoso + O2 + glucemia + lorazepam IV 4mg"},
+                    {"id": "b", "text": "5-10 min: si persiste, segunda dosis de benzodiacepina"},
+                    {"id": "c", "text": "10-20 min: segunda línea IV — levetiracetam 60 mg/kg o valproato 40 mg/kg"},
+                    {"id": "d", "text": "20-30 min: status refractario — intubación + propofol en infusión"},
+                    {"id": "e", "text": "Tras control: TC cerebral + EEG + investigar causa del status"}
                 ]
             }
         ]
@@ -414,6 +497,33 @@ QUIZZES = [
                     {"id": "d", "text": "Usar dosis demasiado alta de insulina (>0.1 UI/kg/h)", "correct": False,
                      "explanation": "Dosis altas de insulina pueden causar hipoglucemia, pero el problema de no medir el K+ previo puede ser más inmediatamente letal."}
                 ]
+            },
+            {
+                "id": "q7", "type": "multi",
+                "hint": "El protocolo CAD tiene un orden obligatorio. Piensa qué pasa si das insulina con K+ bajo.",
+                "text": "En el manejo de la cetoacidosis diabética (CAD), ¿cuáles de los siguientes son CORRECTOS? (Selecciona TODOS los que apliquen)",
+                "multi_explanation": "El protocolo CAD: la hidratación va primero (SF 1L/h), luego corregir K+ hasta >3.5, luego insulina. El bicarbonato solo se usa si pH <6.9 con shock. La CAD se resuelve cuando pH >7.30, HCO3 >15 y cetonas negativas — NO cuando la glucemia normaliza. Al llegar a 250 mg/dL se añade dextrosa para mantener la insulina corriendo.",
+                "options": [
+                    {"id": "a", "text": "La insulina NO debe iniciarse si el K+ sérico es <3.5 mEq/L",          "correct": True,  "explanation": "Correcto. Regla de oro: no insulina con K+ <3.5."},
+                    {"id": "b", "text": "El bicarbonato está indicado en todo pH <7.20 en CAD",               "correct": False, "explanation": "Incorrecto. El bicarbonato solo se usa en pH <6.9 con compromiso hemodinámico grave."},
+                    {"id": "c", "text": "La CAD se resuelve cuando pH >7.30 y HCO3 >15 y cetonas negativas",  "correct": True,  "explanation": "Correcto. Los criterios de resolución son metabólicos, no glucémicos."},
+                    {"id": "d", "text": "Al llegar a glucemia de 250 mg/dL se añade dextrosa para mantener la insulina", "correct": True, "explanation": "Correcto. La dextrosa permite mantener la insulina corriendo (que resuelve la cetosis) sin causar hipoglucemia."},
+                    {"id": "e", "text": "La hidratación IV es la primera medida, antes que la insulina",       "correct": True,  "explanation": "Correcto. Hidratación primero para restaurar la precarga y corregir la hiperosmolaridad."}
+                ]
+            },
+            {
+                "id": "q8", "type": "order",
+                "hint": "Primero estabilizar, luego identificar la causa, luego tratar específicamente.",
+                "text": "Ordena el manejo inicial del shock séptico (bundle de la primera hora):",
+                "correct_order": ["a", "b", "c", "d", "e"],
+                "explanation": "El bundle de 1 hora en sepsis es: 1) Lactato sérico para estratificar, 2) Hemocultivos ANTES del antibiótico, 3) Antibiótico de amplio espectro en la primera hora, 4) Cristaloides 30 mL/kg si hipotensión o lactato >4, 5) Vasopresores si no responde a fluidos. Este orden es crítico — los hemocultivos antes del antibiótico es la secuencia que más se altera en la práctica.",
+                "items": [
+                    {"id": "a", "text": "Medir lactato sérico"},
+                    {"id": "b", "text": "Tomar hemocultivos x2 (antes del antibiótico)"},
+                    {"id": "c", "text": "Antibiótico de amplio espectro IV dentro de la primera hora"},
+                    {"id": "d", "text": "Cristaloides 30 mL/kg IV si hipotensión o lactato >4 mmol/L"},
+                    {"id": "e", "text": "Norepinefrina si TA media <65 mmHg persiste tras fluidos"}
+                ]
             }
         ]
     },
@@ -507,6 +617,33 @@ QUIZZES = [
                      "explanation": "La dieta oral se puede reintroducir a las 24h post-endoscopia en úlceras tratadas sin sangrado activo. No es un error."},
                     {"id": "d", "text": "No repetir la endoscopia en 24h", "correct": False,
                      "explanation": "La endoscopia de control rutinaria no está indicada en la actualidad si la hemostasia inicial fue exitosa. No hacerla no es un error."}
+                ]
+            },
+            {
+                "id": "q7", "type": "multi",
+                "hint": "En la pancreatitis aguda, dos cosas son fundamentales las primeras 12-24h. Los antibióticos y la TC son para casos específicos.",
+                "text": "¿Cuáles de los siguientes son CORRECTOS en el manejo de la pancreatitis aguda leve? (Selecciona TODOS los que apliquen)",
+                "multi_explanation": "El manejo de la pancreatitis leve se basa en hidratación agresiva (Ringer lactato, 250-500 mL/h) y analgesia adecuada. La dieta oral precoz (dentro de 24-48h si tolera) está respaldada por evidencia reciente y reduce la estadía. Los antibióticos profilácticos y la nutrición parenteral NO están indicados en formas leves. La CPRE solo si hay colangitis o ictericia obstructiva.",
+                "options": [
+                    {"id": "a", "text": "Hidratación IV agresiva con Ringer lactato 250-500 mL/h las primeras 12-24h", "correct": True,  "explanation": "Correcto. La hidratación agresiva precoz es el pilar del tratamiento de pancreatitis aguda."},
+                    {"id": "b", "text": "Antibióticos profilácticos IV para prevenir infección de la necrosis",         "correct": False, "explanation": "Incorrecto. Los antibióticos profilácticos no tienen indicación en pancreatitis aguda (ninguna guía los recomienda)."},
+                    {"id": "c", "text": "Reinicio de dieta oral en 24-48h si el paciente tolera",                        "correct": True,  "explanation": "Correcto. La dieta oral precoz en pancreatitis leve reduce la estadía hospitalaria."},
+                    {"id": "d", "text": "Nutrición parenteral total desde el primer día para que el páncreas descanse",  "correct": False, "explanation": "Incorrecto. La NPT no mejora el pronóstico en pancreatitis leve y añade riesgos propios."},
+                    {"id": "e", "text": "Analgesia adecuada (ketorolaco, metamizol o morfina si necesario)",              "correct": True,  "explanation": "Correcto. El control del dolor es un pilar del tratamiento — la analgesia no retrasa el diagnóstico."}
+                ]
+            },
+            {
+                "id": "q8", "type": "order",
+                "hint": "En la hemorragia digestiva alta: primero estabilizar al paciente, luego estratificar, luego actuar según el riesgo.",
+                "text": "Ordena el manejo correcto de la hemorragia digestiva alta en urgencias:",
+                "correct_order": ["a", "b", "c", "d", "e"],
+                "explanation": "En HDA: primero la resucitación hemodinámica (sin estabilidad no se puede endoscopiar con seguridad), luego estratificación del riesgo con Glasgow-Blatchford, luego IBP IV para preparar la mucosa, luego endoscopia dentro de las 24h (o 12h en alto riesgo), y la cirugía solo si fallan dos intentos endoscópicos. La endoscopia precoz reduce la mortalidad significativamente.",
+                "items": [
+                    {"id": "a", "text": "2 vías periféricas + expansión con cristaloides si inestable (TA <100 o FC >100)"},
+                    {"id": "b", "text": "Score Glasgow-Blatchford para estratificación del riesgo"},
+                    {"id": "c", "text": "IBP en infusión continua IV (omeprazol 80mg bolo + 8mg/h)"},
+                    {"id": "d", "text": "Endoscopia digestiva alta dentro de 12-24h según el riesgo"},
+                    {"id": "e", "text": "Hemostasia endoscópica combinada si úlcera de alto riesgo (Forrest I-IIa)"}
                 ]
             }
         ]
@@ -615,6 +752,34 @@ QUIZZES = [
                      "explanation": "La heparina puede causar hipoaldosteronismo e hiperpotasemia, pero es rara y raramente grave comparada con la HIT."},
                     {"id": "d", "text": "Osteoporosis por uso prolongado", "correct": False,
                      "explanation": "La osteoporosis ocurre con uso prolongado (>3 meses) de heparina no fraccionada. No es la complicación más temida en el contexto agudo."}
+                ]
+            },
+            {
+                "id": "q8", "type": "multi",
+                "hint": "La anafilaxia tiene un tratamiento de primera línea claro y luego adyuvantes. Los adyuvantes nunca van primero.",
+                "text": "En el manejo de la anafilaxia grave con angioedema y shock, ¿cuáles de estas acciones son CORRECTAS? (Selecciona TODAS las que apliquen)",
+                "multi_explanation": "En anafilaxia: adrenalina IM es el único tratamiento que salva vidas en los primeros minutos — va SIEMPRE primero. Luego fluidos IV para el shock distributivo. Los antihistamínicos y corticoides son adyuvantes para prevenir la fase tardía pero nunca reemplazan a la adrenalina. La observación de 6-8h es obligatoria por el riesgo de reacción bifásica (5-20%). El alta siempre incluye autoinyector de adrenalina.",
+                "options": [
+                    {"id": "a", "text": "Adrenalina 0.5mg IM en muslo anterolateral — primera acción siempre",                 "correct": True,  "explanation": "Correcto. Sin adrenalina, la anafilaxia puede ser mortal en minutos."},
+                    {"id": "b", "text": "Difenhidramina IV primero — para frenar la histamina",                                   "correct": False, "explanation": "Incorrecto. Los antihistamínicos no revierten el shock ni el angioedema. Van después de la adrenalina."},
+                    {"id": "c", "text": "SF IV 500-1000 mL para el shock distributivo",                                          "correct": True,  "explanation": "Correcto. Los fluidos compensan la vasodilatación masiva del shock anafiláctico."},
+                    {"id": "d", "text": "Corticoides IV (metilprednisolona) para prevenir la reacción bifásica",                  "correct": True,  "explanation": "Correcto. Los corticoides previenen (aunque no eliminan) la reacción bifásica tardía. Van después de la adrenalina."},
+                    {"id": "e", "text": "Observación mínima de 6-8 horas antes del alta",                                        "correct": True,  "explanation": "Correcto. La reacción bifásica ocurre en 5-20% de los casos, típicamente 1-8h después."},
+                    {"id": "f", "text": "Alta sin más tratamiento si mejoró completamente a los 30 minutos",                     "correct": False, "explanation": "Incorrecto. La mejoría rápida no descarta reacción bifásica. El alta prematura puede ser fatal."}
+                ]
+            },
+            {
+                "id": "q9", "type": "order",
+                "hint": "Primero lo que determina si hay hemorragia cerebral, luego verificar elegibilidad, luego tratar.",
+                "text": "Ordena el manejo correcto del ACV isquémico agudo desde el ingreso a urgencias:",
+                "correct_order": ["a", "b", "c", "d", "e"],
+                "explanation": "El manejo del ACV agudo sigue esta cadena: 1) TC sin contraste para descartar hemorragia (si hay hemorragia, el tPA está contraindicado), 2) Calcular NIHSS y verificar contraindicaciones para trombolisis, 3) Controlar TA si >185/110 (requisito para tPA), 4) Administrar alteplase dentro del tiempo de ventana, 5) Monitoreo en Unidad de Stroke con TC de control a las 24h. El tiempo puerta-aguja <60 minutos es el estándar de calidad.",
+                "items": [
+                    {"id": "a", "text": "TC cerebral sin contraste urgente (descartar hemorragia)"},
+                    {"id": "b", "text": "NIHSS + verificar contraindicaciones para trombolisis"},
+                    {"id": "c", "text": "Controlar TA si >185/110 mmHg con labetalol IV"},
+                    {"id": "d", "text": "Administrar alteplase IV 0.9 mg/kg dentro de la ventana de 4.5h"},
+                    {"id": "e", "text": "Monitoreo en Unidad de Stroke + TC control a las 24h"}
                 ]
             }
         ]
