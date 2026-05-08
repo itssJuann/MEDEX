@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 import { useLang } from '../context/LangContext'
 import { useAuth } from '../context/AuthContext'
 import { getProgress } from '../utils/progress'
+import TourGuide from '../components/TourGuide'
+
+const TOUR_KEY = 'medex_community_tour_done'
 
 const DIFF_STYLE = {
   "Básico":     "bg-green-50 text-green-700 border border-green-200",
@@ -20,7 +23,78 @@ export default function Community() {
   const [mine, setMine]     = useState([])
   const [search, setSearch] = useState('')
   const [system, setSystem] = useState(null)
-  const [tab, setTab]       = useState('all')  // 'all' | 'mine'
+  const [tab, setTab]       = useState('all')
+  const [showTour, setShowTour] = useState(false)
+
+  useEffect(() => {
+    if (!localStorage.getItem(TOUR_KEY)) { setShowTour(true); localStorage.setItem(TOUR_KEY, '1') }
+  }, [])
+
+  const SLIDES = [
+    {
+      icon: '👥',
+      title: lbl('Casos de la Comunidad', 'Community Cases'),
+      desc: lbl('Casos clínicos creados por otros estudiantes y revisados por moderadores. Aprende de la experiencia colectiva.', 'Clinical cases created by other students and reviewed by moderators. Learn from collective experience.'),
+      visual: (
+        <div className="flex flex-col gap-2 w-full">
+          {[['Dolor abdominal atípico en joven','@estudiante_med','🟢 Aprobado'],['FA con preexcitación','@residente_cardio','🟢 Aprobado'],['Cefalea en trueno','@medicina4','⏳ En revisión']].map(([title,author,status],i)=>(
+            <div key={i} className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs">
+              <div className="flex-1">
+                <div className="font-medium text-gray-700">{title}</div>
+                <div className="text-gray-400">{author}</div>
+              </div>
+              <span className="text-xs">{status}</span>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: '▶️',
+      title: lbl('Practica casos reales', 'Play real cases'),
+      desc: lbl('Los casos aprobados funcionan igual que los casos clínicos oficiales: con ramificación, feedback y perla clínica.', 'Approved cases work just like official clinical cases: with branching, feedback and clinical pearl.'),
+      visual: (
+        <div className="w-full bg-white border border-violet-200 rounded-xl p-4">
+          <div className="text-xs font-bold text-violet-700 mb-2">Caso: Dolor abdominal atípico</div>
+          <p className="text-xs text-gray-600 mb-3">Mujer de 22 años con dolor en FID de 6h, sin fiebre, prueba de embarazo positiva...</p>
+          <div className="flex flex-col gap-1.5">
+            {['Ecografía pélvica urgente','Analgesia y alta','Laparoscopia directa'].map((opt,i)=>(
+              <div key={i} className={`text-xs px-3 py-1.5 rounded-lg border ${i===0?'border-violet-400 bg-violet-50 text-violet-800':'border-gray-200 text-gray-500'}`}>{opt}</div>
+            ))}
+          </div>
+        </div>
+      ),
+    },
+    {
+      icon: '✏️',
+      title: lbl('Comparte tu propio caso', 'Share your own case'),
+      desc: lbl('¿Tienes un caso interesante? Publícalo y contribuye al aprendizaje de otros estudiantes. Necesitas código de administrador.', 'Have an interesting case? Publish it and contribute to other students\' learning. You need an admin code.'),
+      visual: (
+        <div className="w-full flex flex-col gap-2">
+          <div className="flex items-center gap-2 bg-violet-50 border border-violet-200 rounded-xl px-3 py-2 text-xs text-violet-800">
+            <span>✏️</span><span className="font-medium">Crear nuevo caso</span>
+          </div>
+          <div className="text-xs text-gray-500 leading-relaxed px-1">Define el escenario → añade nodos de decisión → conecta los caminos → publica para revisión.</div>
+        </div>
+      ),
+    },
+    {
+      icon: '⭐',
+      title: lbl('Calidad garantizada', 'Quality guaranteed'),
+      desc: lbl('Todos los casos pasan por revisión de moderadores antes de publicarse. Solo se aprueban los casos clínicamente correctos.', 'All cases go through moderator review before publishing. Only clinically correct cases are approved.'),
+      visual: (
+        <div className="flex flex-col gap-2 w-full">
+          <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2 text-xs text-green-800">
+            <span>🛡️</span><span>Revisado por moderador</span><span className="ml-auto font-bold">✓</span>
+          </div>
+          <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-xl px-3 py-2 text-xs text-yellow-800">
+            <span>⏳</span><span>En revisión</span>
+          </div>
+          <div className="text-xs text-gray-400 px-1">Conviértete en administrador en Ajustes → Código de administrador.</div>
+        </div>
+      ),
+    },
+  ]
 
   useEffect(() => {
     fetch(`${API}/community-cases`)
@@ -54,8 +128,11 @@ export default function Community() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {showTour && <TourGuide slides={SLIDES} onClose={() => setShowTour(false)} />}
       {/* Hero */}
-      <div className="bg-gradient-to-br from-violet-700 to-purple-800 text-white py-14 px-8 text-center">
+      <div className="bg-gradient-to-br from-violet-700 to-purple-800 text-white py-14 px-8 text-center relative">
+        <button onClick={() => setShowTour(true)} title={lbl('Cómo funciona','How it works')}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white text-sm font-bold transition flex items-center justify-center">?</button>
         <div className="text-violet-200 text-sm font-semibold uppercase tracking-widest mb-2">
           {lbl('Contribución académica', 'Academic contribution')}
         </div>

@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 import { useLang } from '../context/LangContext'
 import { getProgress } from '../utils/progress'
 import { translateText } from '../utils/translate'
+import TourGuide from '../components/TourGuide'
+
+const TOUR_KEY = 'medex_quizzes_tour_done'
 
 const DIFFICULTY_STYLES = {
   'Básico':     'bg-green-50 text-green-700 border border-green-200',
@@ -22,8 +25,74 @@ export default function Quizzes() {
   const [rawQuizzes, setRawQuizzes] = useState([])
   const [quizzes, setQuizzes]       = useState([])
   const [filter, setFilter]         = useState(null)
+  const [showTour, setShowTour]     = useState(false)
 
   const lbl = (es, en) => lang === 'en' ? en : es
+
+  useEffect(() => {
+    if (!localStorage.getItem(TOUR_KEY)) { setShowTour(true); localStorage.setItem(TOUR_KEY, '1') }
+  }, [])
+
+  const SLIDES = [
+    {
+      icon: '📝',
+      title: lbl('Micro-Quizzes', 'Micro-Quizzes'),
+      desc: lbl('Tests cortos con preguntas del tipo "siguiente paso" y "error más frecuente". Feedback explicativo en cada respuesta.', 'Short tests with "next step" and "most common error" questions. Explanatory feedback on every answer.'),
+      visual: (
+        <div className="flex flex-col gap-2 w-full">
+          {[['➜','Siguiente paso','text-blue-700 bg-blue-50 border-blue-200'],['⚠','Error frecuente','text-red-700 bg-red-50 border-red-200'],['✦','Conducta correcta','text-green-700 bg-green-50 border-green-200']].map(([icon,label,cls],i) => (
+            <div key={i} className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-semibold ${cls}`}>
+              <span>{icon}</span>{label}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: '☑',
+      title: lbl('Selecciona TODAS las correctas', 'Select ALL that apply'),
+      desc: lbl('Las preguntas "multi" tienen varias respuestas correctas. Debes marcar todas para puntuar.', '"Multi" questions have several correct answers. You must mark all of them to score.'),
+      visual: (
+        <div className="flex flex-col gap-2 w-full">
+          {[['AAS 100 mg/día', true],['Betabloqueante', true],['Antibiótico profiláctico', false],['Estatina alta intensidad', true]].map(([text, correct], i) => (
+            <div key={i} className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs ${correct ? 'bg-purple-50 border-purple-300 text-purple-800' : 'bg-gray-50 border-gray-200 text-gray-400'}`}>
+              <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${correct ? 'bg-purple-500 border-purple-500' : 'border-gray-300'}`}>
+                {correct && <span className="text-white text-xs">✓</span>}
+              </div>
+              {text}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: '⟳',
+      title: lbl('Ordena los pasos', 'Put the steps in order'),
+      desc: lbl('Las preguntas "orden" te piden colocar pasos clínicos en la secuencia correcta. Haz clic para numerarlos.', '"Order" questions ask you to place clinical steps in the correct sequence. Click to number them.'),
+      visual: (
+        <div className="flex flex-col gap-2 w-full">
+          {[['Hemocultivos x2',1],['Antibiótico IV',2],['Cristaloides 30mL/kg',3]].map(([text, pos], i) => (
+            <div key={i} className="flex items-center gap-2 px-3 py-2 bg-teal-50 border border-teal-300 rounded-xl text-xs text-teal-800">
+              <div className="w-7 h-7 rounded-full bg-teal-500 text-white flex items-center justify-center text-sm font-bold shrink-0">{pos}</div>
+              {text}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: '🔥',
+      title: lbl('Racha y progreso', 'Streak and progress'),
+      desc: lbl('Acumula rachas de respuestas correctas. Tu progreso queda guardado y puedes repetir cualquier quiz.', 'Build streaks of correct answers. Your progress is saved and you can replay any quiz.'),
+      visual: (
+        <div className="flex flex-col items-center gap-3 w-full">
+          <div className="flex items-center gap-2 bg-orange-50 border border-orange-200 text-orange-700 px-4 py-2 rounded-full text-sm font-bold">🔥 5 en racha</div>
+          <div className="w-full bg-gray-200 rounded-full h-2"><div className="h-2 bg-indigo-600 rounded-full" style={{width:'75%'}} /></div>
+          <div className="text-xs text-gray-500">6 / 8 correctas — 75%</div>
+        </div>
+      ),
+    },
+  ]
 
   useEffect(() => {
     fetch(`${API}/quizzes`)
@@ -47,8 +116,11 @@ export default function Quizzes() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {showTour && <TourGuide slides={SLIDES} onClose={() => setShowTour(false)} />}
       {/* Hero */}
-      <div className="bg-gradient-to-br from-[#1e1b4b] to-[#312e81] text-white py-14 px-8 text-center">
+      <div className="bg-gradient-to-br from-[#1e1b4b] to-[#312e81] text-white py-14 px-8 text-center relative">
+        <button onClick={() => setShowTour(true)} title={lbl('Cómo funciona','How it works')}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white text-sm font-bold transition flex items-center justify-center">?</button>
         <div className="text-indigo-300 text-sm font-semibold uppercase tracking-widest mb-2">
           {lbl('Evaluación activa', 'Active assessment')}
         </div>

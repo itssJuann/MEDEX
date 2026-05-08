@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../context/LangContext'
 import { translateText } from '../utils/translate'
+import TourGuide from '../components/TourGuide'
+
+const TOUR_KEY = 'medex_anatomy_tour_done'
 
 // ─── SVG Body with clickable organs ───────────────────────────────────────────
 function BodySVG({ activeZone, hoveredZone, onClickZone, onHoverZone, organs }) {
@@ -261,10 +264,68 @@ export default function AnatomyMap() {
   const [organs, setOrgans]               = useState([])
   const [activeZone, setActiveZone]       = useState(null)
   const [hoveredZone, setHoveredZone]     = useState(null)
-  const [organData, setOrganData]         = useState(null)  // full organ with pathologies
-  const [selectedPath, setSelectedPath]   = useState(null)  // selected pathology object
+  const [organData, setOrganData]         = useState(null)
+  const [selectedPath, setSelectedPath]   = useState(null)
   const [tab, setTab]                     = useState('anatomy')
   const [loading, setLoading]             = useState(false)
+  const [showTour, setShowTour]           = useState(false)
+
+  const lbl = (es, en) => lang === 'en' ? en : es
+
+  useEffect(() => {
+    if (!localStorage.getItem(TOUR_KEY)) { setShowTour(true); localStorage.setItem(TOUR_KEY, '1') }
+  }, [])
+
+  const SLIDES = [
+    {
+      icon: '🫀',
+      title: lbl('Mapa Anatómico Interactivo', 'Interactive Anatomy Map'),
+      desc: lbl('Un cuerpo humano interactivo. Haz clic en cualquier órgano para explorar su anatomía, patologías y complicaciones.', 'An interactive human body. Click any organ to explore its anatomy, pathologies and complications.'),
+      visual: (
+        <div className="flex flex-col items-center gap-3 w-full">
+          <div className="flex gap-3 text-2xl">{'🫀🫁🧠🫘'.split('').map((e,i)=><span key={i}>{e}</span>)}</div>
+          <div className="text-xs text-gray-500 text-center">Haz clic en cualquier órgano del mapa</div>
+          <div className="flex gap-2 flex-wrap justify-center">
+            {['Corazón','Pulmones','Hígado','Riñones'].map((o,i)=>(
+              <span key={i} className="text-xs bg-gray-800 text-white px-3 py-1 rounded-full">{o}</span>
+            ))}
+          </div>
+        </div>
+      ),
+    },
+    {
+      icon: '👆',
+      title: lbl('Selecciona un órgano', 'Select an organ'),
+      desc: lbl('Al hacer clic aparecen las patologías asociadas a ese órgano. Elige una para estudiarla en detalle.', 'Clicking shows the pathologies associated with that organ. Choose one to study it in detail.'),
+      visual: (
+        <div className="w-full bg-white border border-gray-200 rounded-xl p-4">
+          <div className="text-xs font-bold text-gray-700 mb-3">🫀 Corazón — Patologías</div>
+          <div className="flex flex-col gap-2">
+            {['Infarto Agudo de Miocardio','Insuficiencia Cardíaca','Pericarditis'].map((p,i)=>(
+              <div key={i} className={`text-xs px-3 py-2 rounded-lg border ${i===0?'border-blue-400 bg-blue-50 text-blue-800 font-semibold':'border-gray-200 bg-gray-50 text-gray-600'}`}>{p}</div>
+            ))}
+          </div>
+        </div>
+      ),
+    },
+    {
+      icon: '📚',
+      title: lbl('Tres pestañas de contenido', 'Three content tabs'),
+      desc: lbl('Cada patología tiene anatomía detallada, presentación clínica y complicaciones frecuentes.', 'Each pathology has detailed anatomy, clinical presentation and common complications.'),
+      visual: (
+        <div className="w-full">
+          <div className="flex gap-1 mb-3">
+            {[['Anatomía','bg-gray-800 text-white'],['Clínica','bg-white border border-gray-300 text-gray-600'],['Complicaciones','bg-white border border-gray-300 text-gray-600']].map(([label,cls],i)=>(
+              <span key={i} className={`text-xs px-3 py-1.5 rounded-full font-medium ${cls}`}>{label}</span>
+            ))}
+          </div>
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-xs text-gray-700 leading-relaxed">
+            Oclusión de la arteria coronaria → isquemia → necrosis miocárdica. Zona de infarto determinada por la arteria afectada.
+          </div>
+        </div>
+      ),
+    },
+  ]
 
   const lbl = (es, en) => lang === 'en' ? en : es
 
@@ -320,8 +381,11 @@ export default function AnatomyMap() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {showTour && <TourGuide slides={SLIDES} onClose={() => setShowTour(false)} />}
       {/* Hero */}
-      <div className="bg-gradient-to-br from-gray-800 to-gray-900 text-white py-10 px-8 text-center">
+      <div className="bg-gradient-to-br from-gray-800 to-gray-900 text-white py-10 px-8 text-center relative">
+        <button onClick={() => setShowTour(true)} title={lbl('Cómo funciona','How it works')}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white text-sm font-bold transition flex items-center justify-center">?</button>
         <div className="text-gray-400 text-sm font-semibold uppercase tracking-widest mb-2">
           {lbl('Anatomía interactiva', 'Interactive anatomy')}
         </div>

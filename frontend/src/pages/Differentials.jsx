@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 import { useLang } from '../context/LangContext'
 import { translateText } from '../utils/translate'
 import { getProgress } from '../utils/progress'
+import TourGuide from '../components/TourGuide'
+
+const TOUR_KEY = 'medex_differentials_tour_done'
 
 const SYSTEMS      = ["Cardiovascular", "Respiratorio", "Digestivo", "Neurológico", "Endocrino", "Infeccioso", "Renal"]
 const DIFFICULTIES = ["Básico", "Intermedio", "Avanzado"]
@@ -21,6 +24,71 @@ export default function Differentials() {
   const [search, setSearch]         = useState("")
   const [system, setSystem]         = useState(null)
   const [difficulty, setDifficulty] = useState(null)
+  const [showTour, setShowTour]     = useState(false)
+
+  const lbl = (es, en) => lang === 'en' ? en : es
+
+  useEffect(() => {
+    if (!localStorage.getItem(TOUR_KEY)) { setShowTour(true); localStorage.setItem(TOUR_KEY, '1') }
+  }, [])
+
+  const SLIDES = [
+    {
+      icon: '🔬',
+      title: lbl('Diagnóstico Diferencial', 'Differential Diagnosis'),
+      desc: lbl('Se te presenta un cuadro clínico y debes identificar los diagnósticos posibles, ordenados por probabilidad.', 'You are presented with a clinical picture and must identify possible diagnoses, ordered by probability.'),
+      visual: (
+        <div className="flex flex-col gap-2 w-full">
+          <div className="text-xs font-semibold text-gray-500 mb-1">Disnea + dolor pleurítico + hemoptisis...</div>
+          {[['TEP','Alta probabilidad','bg-red-50 border-red-300 text-red-700'],['Neumonía','Media probabilidad','bg-yellow-50 border-yellow-300 text-yellow-700'],['Pleuritis','Baja probabilidad','bg-green-50 border-green-200 text-green-700']].map(([dx,prob,cls],i)=>(
+            <div key={i} className={`flex items-center justify-between px-3 py-2 rounded-xl border text-xs font-medium ${cls}`}>
+              <span>{dx}</span><span className="opacity-70">{prob}</span>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: '📋',
+      title: lbl('Analiza los datos clínicos', 'Analyze clinical data'),
+      desc: lbl('Cada caso te muestra síntomas, signos y resultados de laboratorio. Usa toda la información para razonar.', 'Each case shows symptoms, signs and lab results. Use all the information to reason through it.'),
+      visual: (
+        <div className="flex flex-col gap-2 w-full text-xs">
+          {[['Síntomas','Disnea brusca, hemoptisis, dolor pleurítico'],['Antecedentes','Cirugía hace 10 días, inmovilización'],['Labs','D-dímero 3.400, SatO2 88%']].map(([label,val],i)=>(
+            <div key={i} className="flex gap-2 items-start bg-white border border-gray-200 rounded-xl px-3 py-2">
+              <span className="font-semibold text-gray-500 shrink-0 w-20">{label}</span>
+              <span className="text-gray-700">{val}</span>
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: '🎯',
+      title: lbl('Elige el diagnóstico más probable', 'Choose the most likely diagnosis'),
+      desc: lbl('Selecciona el diagnóstico correcto y recibe feedback explicando por qué cada opción es más o menos probable.', 'Select the correct diagnosis and get feedback explaining why each option is more or less likely.'),
+      visual: (
+        <div className="flex flex-col gap-2 w-full">
+          {[['Tromboembolismo Pulmonar',true],['Neumonía atípica',false],['Crisis de asma',false]].map(([dx,correct],i)=>(
+            <div key={i} className={`px-3 py-2 rounded-xl border text-xs font-medium ${correct ? 'border-green-400 bg-green-50 text-green-800' : 'border-gray-200 bg-gray-50 text-gray-500'}`}>
+              {correct && '✓ '}{dx}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: '💡',
+      title: lbl('Aprende el razonamiento', 'Learn the reasoning'),
+      desc: lbl('El feedback explica qué hallazgos apuntan a cada diagnóstico y cuáles permiten descartarlos.', 'Feedback explains which findings point to each diagnosis and which allow you to rule them out.'),
+      visual: (
+        <div className="w-full bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <div className="text-xs font-bold text-blue-700 mb-1">💡 Razonamiento clínico</div>
+          <div className="text-xs text-blue-800 leading-relaxed">Cirugía reciente + inmovilización + D-dímero elevado + taquicardia + hipoxemia = Wells alto → TEP hasta confirmar con TCAP.</div>
+        </div>
+      ),
+    },
+  ]
 
   useEffect(() => {
     fetch(`${API}/differentials`)
@@ -50,7 +118,10 @@ export default function Differentials() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-primary text-white py-14 px-8 text-center">
+      {showTour && <TourGuide slides={SLIDES} onClose={() => setShowTour(false)} />}
+      <div className="bg-primary text-white py-14 px-8 text-center relative">
+        <button onClick={() => setShowTour(true)} title={lbl('Cómo funciona','How it works')}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white text-sm font-bold transition flex items-center justify-center">?</button>
         <div className="text-accent text-sm font-semibold uppercase tracking-widest mb-2">{t.interactiveMode}</div>
         <h1 className="text-4xl font-bold mb-3">{t.differentialsTitle}</h1>
         <p className="text-blue-200 text-base max-w-xl mx-auto mb-6">{t.differentialsSubtitle}</p>

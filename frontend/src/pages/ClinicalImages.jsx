@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 import { useLang } from '../context/LangContext'
 import { translateText } from '../utils/translate'
 import { getProgress } from '../utils/progress'
+import TourGuide from '../components/TourGuide'
+
+const TOUR_KEY = 'medex_images_tour_done'
 
 const DIFFICULTIES = ["Básico", "Intermedio", "Avanzado"]
 const MODALITIES   = ["RxTx", "ECG", "TC", "RM", "Histopatología"]
@@ -28,6 +31,71 @@ export default function ClinicalImages() {
   const [search, setSearch]         = useState("")
   const [modality, setModality]     = useState(null)
   const [difficulty, setDifficulty] = useState(null)
+  const [showTour, setShowTour]     = useState(false)
+
+  const lbl = (es, en) => lang === 'en' ? en : es
+
+  useEffect(() => {
+    if (!localStorage.getItem(TOUR_KEY)) { setShowTour(true); localStorage.setItem(TOUR_KEY, '1') }
+  }, [])
+
+  const SLIDES = [
+    {
+      icon: '🩻',
+      title: lbl('Imágenes Clínicas', 'Clinical Images'),
+      desc: lbl('Practica la interpretación de radiografías, ECGs, TACs, RMN e histopatología con casos reales guiados.', 'Practice interpreting X-rays, ECGs, CT scans, MRIs and histopathology with guided real cases.'),
+      visual: (
+        <div className="flex gap-2 flex-wrap justify-center w-full">
+          {[['🫁','RxTx'],['💓','ECG'],['🧠','TC'],['🔬','RM'],['🔭','Histopatología']].map(([icon,label],i)=>(
+            <div key={i} className="flex flex-col items-center bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-600 gap-1">
+              <span className="text-xl">{icon}</span>{label}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: '🔍',
+      title: lbl('Analiza la imagen sistemáticamente', 'Analyze the image systematically'),
+      desc: lbl('Se te presenta la imagen clínica y debes identificar los hallazgos principales antes de responder.', 'You are presented with the clinical image and must identify the main findings before answering.'),
+      visual: (
+        <div className="w-full bg-gray-900 rounded-xl p-4 flex flex-col gap-2">
+          <div className="bg-gray-700 rounded-lg h-16 flex items-center justify-center text-gray-400 text-xs">[ Imagen clínica ]</div>
+          <div className="flex gap-2">
+            {['Cardiomegalia','Derrame pleural','Normal'].map((f,i)=>(
+              <span key={i} className={`text-xs px-2 py-1 rounded-full border ${i===0?'border-purple-400 bg-purple-900 text-purple-200':'border-gray-600 bg-gray-800 text-gray-400'}`}>{f}</span>
+            ))}
+          </div>
+        </div>
+      ),
+    },
+    {
+      icon: '🎯',
+      title: lbl('Responde preguntas dirigidas', 'Answer guided questions'),
+      desc: lbl('Las preguntas te guían para identificar hallazgos específicos: "¿Qué estructura está agrandada?", "¿Qué patrón observas?"', 'Questions guide you to identify specific findings: "What structure is enlarged?", "What pattern do you see?"'),
+      visual: (
+        <div className="w-full flex flex-col gap-2">
+          <div className="text-xs font-semibold text-gray-600 bg-white border border-gray-200 rounded-xl px-3 py-2">¿Cuál es el hallazgo principal en esta radiografía de tórax?</div>
+          {['Consolidación en lóbulo inferior derecho','Neumotórax izquierdo','Derrame pleural bilateral'].map((opt,i)=>(
+            <div key={i} className={`text-xs px-3 py-2 rounded-lg border ${i===0?'border-purple-400 bg-purple-50 text-purple-800':'border-gray-200 bg-gray-50 text-gray-500'}`}>
+              {i===0&&'✓ '}{opt}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      icon: '💡',
+      title: lbl('Aprende a interpretar', 'Learn to interpret'),
+      desc: lbl('El feedback explica los hallazgos clave, cómo reconocerlos y qué diagnósticos implican.', 'Feedback explains the key findings, how to recognize them and what diagnoses they imply.'),
+      visual: (
+        <div className="w-full bg-purple-50 border border-purple-200 rounded-xl p-4">
+          <div className="text-xs font-bold text-purple-700 mb-1">💡 Interpretación</div>
+          <div className="text-xs text-purple-800 leading-relaxed">La opacidad homogénea con broncograma aéreo en el LID es clásica de consolidación neumónica. El signo de Fleischner no está presente, descartando atelectasia.</div>
+        </div>
+      ),
+    },
+  ]
 
   useEffect(() => {
     fetch(`${API}/clinical-images`)
@@ -59,8 +127,11 @@ export default function ClinicalImages() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {showTour && <TourGuide slides={SLIDES} onClose={() => setShowTour(false)} />}
       {/* Hero */}
-      <div className="bg-gradient-to-br from-[#5b21b6] to-[#7c3aed] text-white py-14 px-8 text-center">
+      <div className="bg-gradient-to-br from-[#5b21b6] to-[#7c3aed] text-white py-14 px-8 text-center relative">
+        <button onClick={() => setShowTour(true)} title={lbl('Cómo funciona','How it works')}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white text-sm font-bold transition flex items-center justify-center">?</button>
         <div className="text-purple-200 text-sm font-semibold uppercase tracking-widest mb-2">
           {lang === 'en' ? 'Visual interpretation' : 'Interpretación visual'}
         </div>
