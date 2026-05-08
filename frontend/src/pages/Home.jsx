@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react'
 import { useLang } from '../context/LangContext'
 import { translateText } from '../utils/translate'
 import { getProgress } from '../utils/progress'
+import CasesTour from '../components/CasesTour'
+
+const TOUR_KEY = 'medex_cases_tour_done'
 
 const SYSTEMS      = ["Cardiovascular", "Respiratorio", "Digestivo", "Neurológico", "Endocrino", "Infeccioso", "Renal"]
 const DIFFICULTIES = ["Básico", "Intermedio", "Avanzado"]
@@ -21,6 +24,15 @@ export default function Home() {
   const [search, setSearch]                 = useState("")
   const [system, setSystem]                 = useState(null)
   const [difficulty, setDifficulty]         = useState(null)
+  const [showTour, setShowTour]             = useState(false)
+
+  // Show tour automatically on first visit
+  useEffect(() => {
+    if (!localStorage.getItem(TOUR_KEY)) {
+      setShowTour(true)
+      localStorage.setItem(TOUR_KEY, '1')
+    }
+  }, [])
 
   useEffect(() => {
     fetch(`${API}/pathologies`)
@@ -54,8 +66,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {showTour && <CasesTour onClose={() => setShowTour(false)} />}
+
       {/* Hero */}
-      <div className="bg-primary text-white py-16 px-8 text-center">
+      <div className="bg-primary text-white py-16 px-8 text-center relative">
+        <button
+          onClick={() => setShowTour(true)}
+          title={lang === 'en' ? 'How it works' : 'Cómo funciona'}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white text-sm font-bold transition flex items-center justify-center"
+        >
+          ?
+        </button>
         <h1 className="text-4xl font-bold mb-3">{t.homeTitle}</h1>
         <p className="text-accent text-lg">{t.homeSubtitle}</p>
         <input
