@@ -327,8 +327,6 @@ export default function AnatomyMap() {
     },
   ]
 
-  const lbl = (es, en) => lang === 'en' ? en : es
-
   // Load organ list on mount
   useEffect(() => {
     fetch(`${API}/anatomy`).then(r => r.json()).then(setOrgans).catch(() => {})
